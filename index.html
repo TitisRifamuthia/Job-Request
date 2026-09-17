@@ -14,26 +14,12 @@
         fontFamily: { sans: ['Poppins', 'sans-serif'] },
         colors: {
           maroon: {
-            50: '#fbf3f2',
-            100: '#f5e0de',
-            200: '#e8bcb8',
-            300: '#d68d86',
-            400: '#c05f56',
-            500: '#a53f36',
-            600: '#8a2e26',
-            700: '#6e211c',
-            800: '#5c1a17',
-            900: '#3f1210'
+            50: '#fbf3f2', 100: '#f5e0de', 200: '#e8bcb8', 300: '#d68d86',
+            400: '#c05f56', 500: '#a53f36', 600: '#8a2e26', 700: '#6e211c',
+            800: '#5c1a17', 900: '#3f1210'
           },
-          gold: {
-            400: '#d9b45a',
-            500: '#c9a227',
-            600: '#a9871f'
-          },
-          cream: {
-            50: '#fdfbf7',
-            100: '#f7f1e6'
-          }
+          gold: { 400: '#d9b45a', 500: '#c9a227', 600: '#a9871f' },
+          cream: { 50: '#fdfbf7', 100: '#f7f1e6' }
         }
       }
     }
@@ -58,10 +44,8 @@
 </head>
 <body class="bg-cream-50 text-maroon-900 min-h-screen">
 
-<!-- ==================== TOAST ==================== -->
 <div id="toast" class="fixed top-5 right-5 z-50 hidden max-w-sm px-4 py-3 rounded-xl shadow-lg text-sm font-medium fade-in"></div>
 
-<!-- ==================== LOADING OVERLAY ==================== -->
 <div id="loadingOverlay" class="fixed inset-0 bg-maroon-900/40 backdrop-blur-sm z-40 hidden flex items-center justify-center">
   <div class="bg-white rounded-2xl px-6 py-4 shadow-xl flex items-center gap-3">
     <div class="spinner !border-maroon-200 !border-t-maroon-700"></div>
@@ -107,7 +91,6 @@
 <!-- ==================== APP SCREEN ==================== -->
 <div id="appScreen" class="hidden min-h-screen">
 
-  <!-- Navbar -->
   <header class="bg-maroon-800 text-cream-50 shadow-md sticky top-0 z-30">
     <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
       <div class="flex items-center gap-3">
@@ -128,11 +111,11 @@
       </div>
     </div>
 
-    <!-- Tabs -->
     <nav class="max-w-6xl mx-auto px-4 flex gap-1 overflow-x-auto border-t border-white/10">
       <button data-tab="buatRequest" class="tab-btn px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 border-transparent">Buat Request</button>
       <button data-tab="jobMasuk" class="tab-btn px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 border-transparent">Job Masuk</button>
       <button data-tab="jobKeluar" class="tab-btn px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 border-transparent">Job Keluar</button>
+      <button data-tab="catatanInternal" class="tab-btn px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 border-transparent">Catatan Internal</button>
       <button data-tab="dashboardSLA" id="tabSLABtn" class="tab-btn hidden px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 border-transparent">Dashboard SLA</button>
       <button data-tab="gantiPassword" class="tab-btn px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 border-transparent">Ganti Password</button>
     </nav>
@@ -181,6 +164,10 @@
                 class="w-full px-4 py-2.5 rounded-lg border border-maroon-200 focus:outline-none focus:ring-2 focus:ring-gold-500 bg-white text-sm">
             </div>
           </div>
+          <label class="flex items-center gap-2 text-sm text-maroon-700">
+            <input type="checkbox" id="reqWithMeet" class="rounded border-maroon-300 text-maroon-700 focus:ring-gold-500">
+            Sertakan link Google Meet pada undangan kalender
+          </label>
           <div>
             <label class="block text-sm font-medium text-maroon-700 mb-1">Rincian Tugas</label>
             <textarea id="reqRincian" required rows="4"
@@ -201,7 +188,7 @@
         <div class="p-5 border-b border-maroon-100 flex items-center justify-between">
           <div>
             <h2 class="text-lg font-semibold text-maroon-800">Job Masuk</h2>
-            <p class="text-sm text-maroon-400">Tugas yang ditujukan ke divisi Anda.</p>
+            <p class="text-sm text-maroon-400">Tugas untuk divisi Anda — termasuk request formal & catatan internal.</p>
           </div>
           <button onclick="loadDashboard()" class="text-xs text-maroon-600 border border-maroon-200 px-3 py-1.5 rounded-lg hover:bg-cream-100">Muat Ulang</button>
         </div>
@@ -210,6 +197,7 @@
             <thead class="bg-cream-100 text-maroon-700">
               <tr>
                 <th class="px-4 py-3 text-left font-semibold">ID</th>
+                <th class="px-4 py-3 text-left font-semibold">Tipe</th>
                 <th class="px-4 py-3 text-left font-semibold">Tugas</th>
                 <th class="px-4 py-3 text-left font-semibold">Dari Divisi</th>
                 <th class="px-4 py-3 text-left font-semibold">Prioritas</th>
@@ -231,7 +219,7 @@
         <div class="p-5 border-b border-maroon-100 flex items-center justify-between">
           <div>
             <h2 class="text-lg font-semibold text-maroon-800">Job Keluar</h2>
-            <p class="text-sm text-maroon-400">Tugas yang dibuat oleh divisi Anda.</p>
+            <p class="text-sm text-maroon-400">Request formal yang dibuat oleh divisi Anda.</p>
           </div>
           <button onclick="loadDashboard()" class="text-xs text-maroon-600 border border-maroon-200 px-3 py-1.5 rounded-lg hover:bg-cream-100">Muat Ulang</button>
         </div>
@@ -251,6 +239,60 @@
           </table>
           <p id="jobKeluarEmpty" class="text-center text-sm text-maroon-300 py-8 hidden">Belum ada job keluar.</p>
         </div>
+      </div>
+    </section>
+
+    <!-- TAB: Catatan Internal -->
+    <section id="tab-catatanInternal" class="tab-content hidden fade-in">
+      <div class="bg-white rounded-2xl shadow-sm border border-maroon-100 p-6 max-w-2xl">
+        <h2 class="text-lg font-semibold text-maroon-800 mb-1">Catat Tugas Internal</h2>
+        <p class="text-sm text-maroon-400 mb-5">
+          Gunakan ini kalau divisi lain menugaskan sesuatu ke divisi Anda secara lisan/informal
+          (tanpa membuat Job Request resmi di sistem). Tidak ada email yang dikirim — ini murni catatan pribadi.
+        </p>
+        <form id="internalNoteForm" class="space-y-4">
+          <div>
+            <label class="block text-sm font-medium text-maroon-700 mb-1">Divisi Asal (yang menugaskan)</label>
+            <input type="text" id="noteDivisiAsal" required
+              class="w-full px-4 py-2.5 rounded-lg border border-maroon-200 focus:outline-none focus:ring-2 focus:ring-gold-500 bg-white text-sm"
+              placeholder="Contoh: Divisi Operasional">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-maroon-700 mb-1">Nama Tugas</label>
+            <input type="text" id="noteNamaTugas" required
+              class="w-full px-4 py-2.5 rounded-lg border border-maroon-200 focus:outline-none focus:ring-2 focus:ring-gold-500 bg-white text-sm">
+          </div>
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-maroon-700 mb-1">Prioritas</label>
+              <select id="notePrioritas" required
+                class="w-full px-4 py-2.5 rounded-lg border border-maroon-200 focus:outline-none focus:ring-2 focus:ring-gold-500 bg-white text-sm">
+                <option value="Rendah">Rendah</option>
+                <option value="Sedang" selected>Sedang</option>
+                <option value="Tinggi">Tinggi</option>
+                <option value="Urgent">Urgent</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-maroon-700 mb-1">Deadline (opsional)</label>
+              <input type="datetime-local" id="noteDeadline"
+                class="w-full px-4 py-2.5 rounded-lg border border-maroon-200 focus:outline-none focus:ring-2 focus:ring-gold-500 bg-white text-sm">
+            </div>
+          </div>
+          <label class="flex items-center gap-2 text-sm text-maroon-700">
+            <input type="checkbox" id="noteWithMeet" class="rounded border-maroon-300 text-maroon-700 focus:ring-gold-500">
+            Sertakan link Google Meet pada event kalender pribadi
+          </label>
+          <div>
+            <label class="block text-sm font-medium text-maroon-700 mb-1">Rincian Tugas</label>
+            <textarea id="noteRincian" required rows="4"
+              class="w-full px-4 py-2.5 rounded-lg border border-maroon-200 focus:outline-none focus:ring-2 focus:ring-gold-500 bg-white text-sm"></textarea>
+          </div>
+          <button type="submit"
+            class="bg-maroon-700 hover:bg-maroon-800 text-cream-50 font-semibold px-6 py-2.5 rounded-lg transition shadow-md">
+            Simpan Catatan
+          </button>
+        </form>
       </div>
     </section>
 
@@ -285,6 +327,7 @@
             <thead class="bg-cream-100 text-maroon-700">
               <tr>
                 <th class="px-4 py-3 text-left font-semibold">ID</th>
+                <th class="px-4 py-3 text-left font-semibold">Tipe</th>
                 <th class="px-4 py-3 text-left font-semibold">Tugas</th>
                 <th class="px-4 py-3 text-left font-semibold">Pemohon</th>
                 <th class="px-4 py-3 text-left font-semibold">Tujuan</th>
@@ -327,13 +370,11 @@
 
 <script>
 /* ============================================================
-   KONFIGURASI — GANTI URL INI DENGAN URL WEB APP APPS SCRIPT ANDA
+   GANTI URL INI DENGAN URL WEB APP APPS SCRIPT ANDA (full link)
    ============================================================ */
 const API_URL = 'https://script.google.com/macros/s/AKfycbzULQkTXxMqCGjsGb4AUAnu3UrJ8FQChjsD20HEiYDZ60TXjy81CmdXn7sU9BlLtEjOSQ/exec';
 
 let currentUser = null;
-
-// ---------------- UTIL ----------------
 
 function showToast(message, type = 'success') {
   const toast = document.getElementById('toast');
@@ -372,6 +413,13 @@ function statusBadge(status) {
   return `<span class="px-2.5 py-1 rounded-full text-xs font-medium ${cls}">${escapeHtml(status)}</span>`;
 }
 
+function tipeBadge(tipe) {
+  if (tipe === 'Internal') {
+    return `<span class="px-2.5 py-1 rounded-full text-xs font-medium bg-maroon-900 text-white">Internal</span>`;
+  }
+  return `<span class="px-2.5 py-1 rounded-full text-xs font-medium bg-maroon-100 text-maroon-700">Request</span>`;
+}
+
 function prioritasBadge(p) {
   const map = {
     'Rendah': 'text-maroon-400',
@@ -382,14 +430,12 @@ function prioritasBadge(p) {
   return `<span class="${map[p] || ''}">${escapeHtml(p)}</span>`;
 }
 
-// ---------------- API CALL (hindari CORS preflight) ----------------
-
 async function callApi(action, payload = {}) {
   setLoading(true);
   try {
     const res = await fetch(API_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'text/plain;charset=utf-8' }, // wajib text/plain agar tidak trigger preflight OPTIONS
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
       body: JSON.stringify({ action, ...payload })
     });
     const data = await res.json();
@@ -402,18 +448,9 @@ async function callApi(action, payload = {}) {
   }
 }
 
-// ---------------- SESSION ----------------
-
-function saveSession(user) {
-  localStorage.setItem('jt_user', JSON.stringify(user));
-}
-function getSession() {
-  const raw = localStorage.getItem('jt_user');
-  return raw ? JSON.parse(raw) : null;
-}
-function clearSession() {
-  localStorage.removeItem('jt_user');
-}
+function saveSession(user) { localStorage.setItem('jt_user', JSON.stringify(user)); }
+function getSession() { const raw = localStorage.getItem('jt_user'); return raw ? JSON.parse(raw) : null; }
+function clearSession() { localStorage.removeItem('jt_user'); }
 
 function renderUserInfo() {
   document.getElementById('userNameLabel').textContent = currentUser.nama;
@@ -431,8 +468,6 @@ function enterApp() {
   loadDashboard();
   switchTab('buatRequest');
 }
-
-// ---------------- LOGIN ----------------
 
 document.getElementById('loginForm').addEventListener('submit', async (e) => {
   e.preventDefault();
@@ -458,8 +493,6 @@ document.getElementById('logoutBtn').addEventListener('click', () => {
   location.reload();
 });
 
-// ---------------- TABS ----------------
-
 document.querySelectorAll('.tab-btn').forEach(btn => {
   btn.addEventListener('click', () => switchTab(btn.dataset.tab));
 });
@@ -475,8 +508,6 @@ function switchTab(tabName) {
     btn.classList.toggle('text-maroon-200', !active);
   });
 }
-
-// ---------------- DIVISI LIST ----------------
 
 async function loadDivisiList() {
   const res = await callApi('getDivisiList');
@@ -494,8 +525,6 @@ async function loadDivisiList() {
   }
 }
 
-// ---------------- CREATE REQUEST ----------------
-
 document.getElementById('requestForm').addEventListener('submit', async (e) => {
   e.preventDefault();
   const payload = {
@@ -504,6 +533,7 @@ document.getElementById('requestForm').addEventListener('submit', async (e) => {
     namaTugas: document.getElementById('reqNamaTugas').value,
     prioritas: document.getElementById('reqPrioritas').value,
     deadline: document.getElementById('reqDeadline').value,
+    withMeet: document.getElementById('reqWithMeet').checked,
     rincian: document.getElementById('reqRincian').value,
     namaPengirim: currentUser.nama,
     emailPengirim: currentUser.email
@@ -520,7 +550,29 @@ document.getElementById('requestForm').addEventListener('submit', async (e) => {
   }
 });
 
-// ---------------- DASHBOARD (Job Masuk / Keluar / SLA) ----------------
+document.getElementById('internalNoteForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const payload = {
+    divisiAsal: document.getElementById('noteDivisiAsal').value,
+    divisiTujuan: currentUser.divisi,
+    namaTugas: document.getElementById('noteNamaTugas').value,
+    prioritas: document.getElementById('notePrioritas').value,
+    deadline: document.getElementById('noteDeadline').value,
+    withMeet: document.getElementById('noteWithMeet').checked,
+    rincian: document.getElementById('noteRincian').value,
+    namaPengirim: currentUser.nama,
+    emailPengirim: currentUser.email
+  };
+
+  const res = await callApi('createInternalNote', payload);
+  if (res.success) {
+    showToast('Catatan internal berhasil disimpan (' + res.id + ').');
+    document.getElementById('internalNoteForm').reset();
+    loadDashboard();
+  } else {
+    showToast(res.message || 'Gagal menyimpan catatan.', 'error');
+  }
+});
 
 async function loadDashboard() {
   const res = await callApi('getDashboard', { divisi: currentUser.divisi, role: currentUser.role });
@@ -546,6 +598,7 @@ function renderJobMasuk(list) {
     tr.className = 'border-t border-maroon-50 hover:bg-cream-50';
     tr.innerHTML = `
       <td class="px-4 py-3 font-mono text-xs text-maroon-500">${escapeHtml(job.idRequest)}</td>
+      <td class="px-4 py-3">${tipeBadge(job.tipe)}</td>
       <td class="px-4 py-3">${escapeHtml(job.namaTugas)}</td>
       <td class="px-4 py-3">${escapeHtml(job.divisiPemohon)}</td>
       <td class="px-4 py-3">${prioritasBadge(job.prioritas)}</td>
@@ -598,6 +651,7 @@ function renderSLA(sla, allJobs) {
     tr.className = 'border-t border-maroon-50 hover:bg-cream-50';
     tr.innerHTML = `
       <td class="px-4 py-3 font-mono text-xs text-maroon-500">${escapeHtml(job.idRequest)}</td>
+      <td class="px-4 py-3">${tipeBadge(job.tipe)}</td>
       <td class="px-4 py-3">${escapeHtml(job.namaTugas)}</td>
       <td class="px-4 py-3">${escapeHtml(job.divisiPemohon)}</td>
       <td class="px-4 py-3">${escapeHtml(job.divisiTujuan)}</td>
@@ -618,8 +672,6 @@ async function updateStatus(id, newStatus) {
   }
 }
 
-// ---------------- CHANGE PASSWORD ----------------
-
 document.getElementById('changePasswordForm').addEventListener('submit', async (e) => {
   e.preventDefault();
   const oldPassword = document.getElementById('oldPassword').value;
@@ -633,8 +685,6 @@ document.getElementById('changePasswordForm').addEventListener('submit', async (
     showToast(res.message || 'Gagal mengubah password.', 'error');
   }
 });
-
-// ---------------- INIT ----------------
 
 (function init() {
   const session = getSession();
