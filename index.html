@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sistem Job Request & Ticketing Internal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: { sans: ['Poppins', 'sans-serif'] },
+        colors: {
+          maroon: {
+            50: '#fbf3f2',
+            100: '#f5e0de',
+            200: '#e8bcb8',
+            300: '#d68d86',
+            400: '#c05f56',
+            500: '#a53f36',
+            600: '#8a2e26',
+            700: '#6e211c',
+            800: '#5c1a17',
+            900: '#3f1210'
+          },
+          gold: {
+            400: '#d9b45a',
+            500: '#c9a227',
+            600: '#a9871f'
+          },
+          cream: {
+            50: '#fdfbf7',
+            100: '#f7f1e6'
+          }
+        }
+      }
+    }
+  }
+</script>
+<style>
+  body { font-family: 'Poppins', sans-serif; }
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-thumb { background: #a53f36; border-radius: 8px; }
+  ::-webkit-scrollbar-track { background: #f7f1e6; }
+  .fade-in { animation: fadeIn .25s ease-out; }
+  @keyframes fadeIn { from { opacity:0; transform: translateY(4px);} to {opacity:1; transform:translateY(0);} }
+  .spinner {
+    border: 3px solid rgba(255,255,255,.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    width: 20px; height: 20px;
+    animation: spin .7s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body class="bg-cream-50 text-maroon-900 min-h-screen">
+
+<!-- ==================== TOAST ==================== -->
+<div id="toast" class="fixed top-5 right-5 z-50 hidden max-w-sm px-4 py-3 rounded-xl shadow-lg text-sm font-medium fade-in"></div>
+
+<!-- ==================== LOADING OVERLAY ==================== -->
+<div id="loadingOverlay" class="fixed inset-0 bg-maroon-900/40 backdrop-blur-sm z-40 hidden flex items-center justify-center">
+  <div class="bg-white rounded-2xl px-6 py-4 shadow-xl flex items-center gap-3">
+    <div class="spinner !border-maroon-200 !border-t-maroon-700"></div>
+    <span class="text-maroon-800 font-medium text-sm">Memproses...</span>
+  </div>
+</div>
+
+<!-- ==================== LOGIN SCREEN ==================== -->
+<div id="loginScreen" class="min-h-screen flex items-center justify-center px-4 bg-gradient-to-br from-maroon-900 via-maroon-700 to-maroon-800">
+  <div class="w-full max-w-md bg-cream-50 rounded-2xl shadow-2xl p-8 fade-in border-t-4 border-gold-500">
+    <div class="text-center mb-8">
+      <div class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-maroon-700 flex items-center justify-center shadow-lg">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-gold-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+        </svg>
+      </div>
+      <h1 class="text-xl font-bold text-maroon-800">Job Request & Ticketing</h1>
+      <p class="text-sm text-maroon-500 mt-1">Sistem Internal — Silakan Masuk</p>
+    </div>
+
+    <form id="loginForm" class="space-y-4">
+      <div>
+        <label class="block text-sm font-medium text-maroon-700 mb-1">Email</label>
+        <input type="email" id="loginEmail" required
+          class="w-full px-4 py-2.5 rounded-lg border border-maroon-200 focus:outline-none focus:ring-2 focus:ring-gold-500 bg-white text-sm"
+          placeholder="nama@perusahaan.com">
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-maroon-700 mb-1">Password</label>
+        <input type="password" id="loginPassword" required
+          class="w-full px-4 py-2.5 rounded-lg border border-maroon-200 focus:outline-none focus:ring-2 focus:ring-gold-500 bg-white text-sm"
+          placeholder="••••••••">
+      </div>
+      <button type="submit"
+        class="w-full bg-maroon-700 hover:bg-maroon-800 text-cream-50 font-semibold py-2.5 rounded-lg transition shadow-md flex items-center justify-center gap-2">
+        Masuk
+      </button>
+      <p id="loginError" class="text-sm text-red-600 text-center hidden"></p>
+    </form>
+  </div>
+</div>
+
+<!-- ==================== APP SCREEN ==================== -->
+<div id="appScreen" class="hidden min-h-screen">
+
+  <!-- Navbar -->
+  <header class="bg-maroon-800 text-cream-50 shadow-md sticky top-0 z-30">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-lg bg-gold-500 flex items-center justify-center font-bold text-maroon-900">JT</div>
+        <div>
+          <p class="font-semibold leading-none">Job Ticketing Internal</p>
+          <p class="text-xs text-maroon-200" id="userDivisiLabel"></p>
+        </div>
+      </div>
+      <div class="flex items-center gap-3">
+        <div class="text-right hidden sm:block">
+          <p class="text-sm font-medium" id="userNameLabel"></p>
+          <p class="text-xs text-gold-400" id="userRoleLabel"></p>
+        </div>
+        <button id="logoutBtn" class="bg-maroon-900 hover:bg-black/40 px-3 py-1.5 rounded-lg text-xs font-medium transition">
+          Keluar
+        </button>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <nav class="max-w-6xl mx-auto px-4 flex gap-1 overflow-x-auto border-t border-white/10">
+      <button data-tab="buatRequest" class="tab-btn px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 border-transparent">Buat Request</button>
+      <button data-tab="jobMasuk" class="tab-btn px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 border-transparent">Job Masuk</button>
+      <button data-tab="jobKeluar" class="tab-btn px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 border-transparent">Job Keluar</button>
+      <button data-tab="dashboardSLA" id="tabSLABtn" class="tab-btn hidden px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 border-transparent">Dashboard SLA</button>
+      <button data-tab="gantiPassword" class="tab-btn px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 border-transparent">Ganti Password</button>
+    </nav>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 py-6">
+
+    <!-- TAB: Buat Request -->
+    <section id="tab-buatRequest" class="tab-content fade-in">
+      <div class="bg-white rounded-2xl shadow-sm border border-maroon-100 p-6 max-w-2xl">
+        <h2 class="text-lg font-semibold text-maroon-800 mb-1">Buat Job Request Baru</h2>
+        <p class="text-sm text-maroon-400 mb-5">Kirim permintaan tugas ke divisi lain.</p>
+        <form id="requestForm" class="space-y-4">
+          <div>
+            <label class="block text-sm font-medium text-maroon-700 mb-1">Divisi Pemohon</label>
+            <input type="text" id="reqDivisiPemohon" disabled
+              class="w-full px-4 py-2.5 rounded-lg border border-maroon-100 bg-cream-100 text-sm text-maroon-600">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-maroon-700 mb-1">Divisi Tujuan</label>
+            <select id="reqDivisiTujuan" required
+              class="w-full px-4 py-2.5 rounded-lg border border-maroon-200 focus:outline-none focus:ring-2 focus:ring-gold-500 bg-white text-sm">
+              <option value="">-- Pilih Divisi --</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-maroon-700 mb-1">Nama Tugas</label>
+            <input type="text" id="reqNamaTugas" required
+              class="w-full px-4 py-2.5 rounded-lg border border-maroon-200 focus:outline-none focus:ring-2 focus:ring-gold-500 bg-white text-sm"
+              placeholder="Contoh: Perbaikan AC ruang meeting">
+          </div>
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-maroon-700 mb-1">Prioritas</label>
+              <select id="reqPrioritas" required
+                class="w-full px-4 py-2.5 rounded-lg border border-maroon-200 focus:outline-none focus:ring-2 focus:ring-gold-500 bg-white text-sm">
+                <option value="Rendah">Rendah</option>
+                <option value="Sedang" selected>Sedang</option>
+                <option value="Tinggi">Tinggi</option>
+                <option value="Urgent">Urgent</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-maroon-700 mb-1">Deadline (opsional)</label>
+              <input type="datetime-local" id="reqDeadline"
+                class="w-full px-4 py-2.5 rounded-lg border border-maroon-200 focus:outline-none focus:ring-2 focus:ring-gold-500 bg-white text-sm">
+            </div>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-maroon-700 mb-1">Rincian Tugas</label>
+            <textarea id="reqRincian" required rows="4"
+              class="w-full px-4 py-2.5 rounded-lg border border-maroon-200 focus:outline-none focus:ring-2 focus:ring-gold-500 bg-white text-sm"
+              placeholder="Jelaskan detail tugas yang diminta..."></textarea>
+          </div>
+          <button type="submit"
+            class="bg-maroon-700 hover:bg-maroon-800 text-cream-50 font-semibold px-6 py-2.5 rounded-lg transition shadow-md">
+            Kirim Request
+          </button>
+        </form>
+      </div>
+    </section>
+
+    <!-- TAB: Job Masuk -->
+    <section id="tab-jobMasuk" class="tab-content hidden fade-in">
+      <div class="bg-white rounded-2xl shadow-sm border border-maroon-100 overflow-hidden">
+        <div class="p-5 border-b border-maroon-100 flex items-center justify-between">
+          <div>
+            <h2 class="text-lg font-semibold text-maroon-800">Job Masuk</h2>
+            <p class="text-sm text-maroon-400">Tugas yang ditujukan ke divisi Anda.</p>
+          </div>
+          <button onclick="loadDashboard()" class="text-xs text-maroon-600 border border-maroon-200 px-3 py-1.5 rounded-lg hover:bg-cream-100">Muat Ulang</button>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead class="bg-cream-100 text-maroon-700">
+              <tr>
+                <th class="px-4 py-3 text-left font-semibold">ID</th>
+                <th class="px-4 py-3 text-left font-semibold">Tugas</th>
+                <th class="px-4 py-3 text-left font-semibold">Dari Divisi</th>
+                <th class="px-4 py-3 text-left font-semibold">Prioritas</th>
+                <th class="px-4 py-3 text-left font-semibold">Deadline</th>
+                <th class="px-4 py-3 text-left font-semibold">Status</th>
+                <th class="px-4 py-3 text-left font-semibold">Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="jobMasukBody"></tbody>
+          </table>
+          <p id="jobMasukEmpty" class="text-center text-sm text-maroon-300 py-8 hidden">Belum ada job masuk.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB: Job Keluar -->
+    <section id="tab-jobKeluar" class="tab-content hidden fade-in">
+      <div class="bg-white rounded-2xl shadow-sm border border-maroon-100 overflow-hidden">
+        <div class="p-5 border-b border-maroon-100 flex items-center justify-between">
+          <div>
+            <h2 class="text-lg font-semibold text-maroon-800">Job Keluar</h2>
+            <p class="text-sm text-maroon-400">Tugas yang dibuat oleh divisi Anda.</p>
+          </div>
+          <button onclick="loadDashboard()" class="text-xs text-maroon-600 border border-maroon-200 px-3 py-1.5 rounded-lg hover:bg-cream-100">Muat Ulang</button>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead class="bg-cream-100 text-maroon-700">
+              <tr>
+                <th class="px-4 py-3 text-left font-semibold">ID</th>
+                <th class="px-4 py-3 text-left font-semibold">Tugas</th>
+                <th class="px-4 py-3 text-left font-semibold">Ke Divisi</th>
+                <th class="px-4 py-3 text-left font-semibold">Prioritas</th>
+                <th class="px-4 py-3 text-left font-semibold">Deadline</th>
+                <th class="px-4 py-3 text-left font-semibold">Status</th>
+              </tr>
+            </thead>
+            <tbody id="jobKeluarBody"></tbody>
+          </table>
+          <p id="jobKeluarEmpty" class="text-center text-sm text-maroon-300 py-8 hidden">Belum ada job keluar.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB: Dashboard SLA (Admin) -->
+    <section id="tab-dashboardSLA" class="tab-content hidden fade-in">
+      <h2 class="text-lg font-semibold text-maroon-800 mb-4">Dashboard SLA</h2>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+        <div class="bg-white rounded-2xl shadow-sm border border-maroon-100 p-5">
+          <p class="text-xs text-maroon-400 mb-1">Total Seluruh Tiket</p>
+          <p class="text-3xl font-bold text-maroon-800" id="slaTotal">0</p>
+        </div>
+        <div class="bg-white rounded-2xl shadow-sm border border-maroon-100 p-5">
+          <p class="text-xs text-maroon-400 mb-1">Total Pending</p>
+          <p class="text-3xl font-bold text-gold-600" id="slaPending">0</p>
+        </div>
+        <div class="bg-white rounded-2xl shadow-sm border border-maroon-100 p-5">
+          <p class="text-xs text-maroon-400 mb-1">Total Selesai</p>
+          <p class="text-3xl font-bold text-green-600" id="slaSelesai">0</p>
+        </div>
+        <div class="bg-white rounded-2xl shadow-sm border border-maroon-100 p-5">
+          <p class="text-xs text-maroon-400 mb-1">Lewat Deadline</p>
+          <p class="text-3xl font-bold text-red-600" id="slaOverdue">0</p>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-2xl shadow-sm border border-maroon-100 overflow-hidden">
+        <div class="p-5 border-b border-maroon-100">
+          <h3 class="font-semibold text-maroon-800">Semua Tiket</h3>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead class="bg-cream-100 text-maroon-700">
+              <tr>
+                <th class="px-4 py-3 text-left font-semibold">ID</th>
+                <th class="px-4 py-3 text-left font-semibold">Tugas</th>
+                <th class="px-4 py-3 text-left font-semibold">Pemohon</th>
+                <th class="px-4 py-3 text-left font-semibold">Tujuan</th>
+                <th class="px-4 py-3 text-left font-semibold">Deadline</th>
+                <th class="px-4 py-3 text-left font-semibold">Status</th>
+              </tr>
+            </thead>
+            <tbody id="slaAllBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB: Ganti Password -->
+    <section id="tab-gantiPassword" class="tab-content hidden fade-in">
+      <div class="bg-white rounded-2xl shadow-sm border border-maroon-100 p-6 max-w-md">
+        <h2 class="text-lg font-semibold text-maroon-800 mb-1">Ganti Password</h2>
+        <p class="text-sm text-maroon-400 mb-5">Perbarui password akun Anda.</p>
+        <form id="changePasswordForm" class="space-y-4">
+          <div>
+            <label class="block text-sm font-medium text-maroon-700 mb-1">Password Lama</label>
+            <input type="password" id="oldPassword" required
+              class="w-full px-4 py-2.5 rounded-lg border border-maroon-200 focus:outline-none focus:ring-2 focus:ring-gold-500 bg-white text-sm">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-maroon-700 mb-1">Password Baru</label>
+            <input type="password" id="newPassword" required
+              class="w-full px-4 py-2.5 rounded-lg border border-maroon-200 focus:outline-none focus:ring-2 focus:ring-gold-500 bg-white text-sm">
+          </div>
+          <button type="submit"
+            class="bg-maroon-700 hover:bg-maroon-800 text-cream-50 font-semibold px-6 py-2.5 rounded-lg transition shadow-md">
+            Simpan Password
+          </button>
+        </form>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script>
+/* ============================================================
+   KONFIGURASI — GANTI URL INI DENGAN URL WEB APP APPS SCRIPT ANDA
+   ============================================================ */
+const API_URL = 'https://script.google.com/macros/s/AKfycbzULQkTXxMqCGjsGb4AUAnu3UrJ8FQChjsD20HEiYDZ60TXjy81CmdXn7sU9BlLtEjOSQ/exec';
+
+let currentUser = null;
+
+// ---------------- UTIL ----------------
+
+function showToast(message, type = 'success') {
+  const toast = document.getElementById('toast');
+  toast.textContent = message;
+  toast.className = 'fixed top-5 right-5 z-50 max-w-sm px-4 py-3 rounded-xl shadow-lg text-sm font-medium fade-in ' +
+    (type === 'success' ? 'bg-green-600 text-white' : 'bg-red-600 text-white');
+  toast.classList.remove('hidden');
+  setTimeout(() => toast.classList.add('hidden'), 3500);
+}
+
+function setLoading(state) {
+  document.getElementById('loadingOverlay').classList.toggle('hidden', !state);
+}
+
+function escapeHtml(str) {
+  if (str === null || str === undefined) return '';
+  return str.toString()
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+function formatDate(iso) {
+  if (!iso) return '-';
+  const d = new Date(iso);
+  if (isNaN(d.getTime())) return '-';
+  return d.toLocaleString('id-ID', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+}
+
+function statusBadge(status) {
+  const map = {
+    'Pending': 'bg-gold-500/20 text-gold-600 border border-gold-500/40',
+    'In Progress': 'bg-blue-100 text-blue-700 border border-blue-300',
+    'Completed': 'bg-green-100 text-green-700 border border-green-300'
+  };
+  const cls = map[status] || 'bg-gray-100 text-gray-600 border border-gray-300';
+  return `<span class="px-2.5 py-1 rounded-full text-xs font-medium ${cls}">${escapeHtml(status)}</span>`;
+}
+
+function prioritasBadge(p) {
+  const map = {
+    'Rendah': 'text-maroon-400',
+    'Sedang': 'text-maroon-600',
+    'Tinggi': 'text-maroon-700 font-semibold',
+    'Urgent': 'text-red-600 font-bold'
+  };
+  return `<span class="${map[p] || ''}">${escapeHtml(p)}</span>`;
+}
+
+// ---------------- API CALL (hindari CORS preflight) ----------------
+
+async function callApi(action, payload = {}) {
+  setLoading(true);
+  try {
+    const res = await fetch(API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' }, // wajib text/plain agar tidak trigger preflight OPTIONS
+      body: JSON.stringify({ action, ...payload })
+    });
+    const data = await res.json();
+    return data;
+  } catch (err) {
+    showToast('Gagal terhubung ke server: ' + err.message, 'error');
+    return { success: false, message: err.message };
+  } finally {
+    setLoading(false);
+  }
+}
+
+// ---------------- SESSION ----------------
+
+function saveSession(user) {
+  localStorage.setItem('jt_user', JSON.stringify(user));
+}
+function getSession() {
+  const raw = localStorage.getItem('jt_user');
+  return raw ? JSON.parse(raw) : null;
+}
+function clearSession() {
+  localStorage.removeItem('jt_user');
+}
+
+function renderUserInfo() {
+  document.getElementById('userNameLabel').textContent = currentUser.nama;
+  document.getElementById('userRoleLabel').textContent = currentUser.role;
+  document.getElementById('userDivisiLabel').textContent = 'Divisi: ' + currentUser.divisi;
+  document.getElementById('reqDivisiPemohon').value = currentUser.divisi;
+  document.getElementById('tabSLABtn').classList.toggle('hidden', currentUser.role !== 'Admin');
+}
+
+function enterApp() {
+  document.getElementById('loginScreen').classList.add('hidden');
+  document.getElementById('appScreen').classList.remove('hidden');
+  renderUserInfo();
+  loadDivisiList();
+  loadDashboard();
+  switchTab('buatRequest');
+}
+
+// ---------------- LOGIN ----------------
+
+document.getElementById('loginForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const email = document.getElementById('loginEmail').value.trim();
+  const password = document.getElementById('loginPassword').value;
+  const errEl = document.getElementById('loginError');
+  errEl.classList.add('hidden');
+
+  const res = await callApi('login', { email, password });
+  if (res.success) {
+    currentUser = res.user;
+    saveSession(currentUser);
+    enterApp();
+  } else {
+    errEl.textContent = res.message || 'Login gagal.';
+    errEl.classList.remove('hidden');
+  }
+});
+
+document.getElementById('logoutBtn').addEventListener('click', () => {
+  clearSession();
+  currentUser = null;
+  location.reload();
+});
+
+// ---------------- TABS ----------------
+
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => switchTab(btn.dataset.tab));
+});
+
+function switchTab(tabName) {
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+  document.getElementById('tab-' + tabName).classList.remove('hidden');
+
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    const active = btn.dataset.tab === tabName;
+    btn.classList.toggle('border-gold-500', active);
+    btn.classList.toggle('text-gold-400', active);
+    btn.classList.toggle('text-maroon-200', !active);
+  });
+}
+
+// ---------------- DIVISI LIST ----------------
+
+async function loadDivisiList() {
+  const res = await callApi('getDivisiList');
+  const select = document.getElementById('reqDivisiTujuan');
+  select.innerHTML = '<option value="">-- Pilih Divisi --</option>';
+  if (res.success) {
+    res.divisiList
+      .filter(d => d.toLowerCase() !== (currentUser.divisi || '').toLowerCase())
+      .forEach(d => {
+        const opt = document.createElement('option');
+        opt.value = d;
+        opt.textContent = d;
+        select.appendChild(opt);
+      });
+  }
+}
+
+// ---------------- CREATE REQUEST ----------------
+
+document.getElementById('requestForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const payload = {
+    divisiPemohon: currentUser.divisi,
+    divisiTujuan: document.getElementById('reqDivisiTujuan').value,
+    namaTugas: document.getElementById('reqNamaTugas').value,
+    prioritas: document.getElementById('reqPrioritas').value,
+    deadline: document.getElementById('reqDeadline').value,
+    rincian: document.getElementById('reqRincian').value,
+    namaPengirim: currentUser.nama,
+    emailPengirim: currentUser.email
+  };
+
+  const res = await callApi('createRequest', payload);
+  if (res.success) {
+    showToast('Request berhasil dikirim (' + res.id + ').');
+    document.getElementById('requestForm').reset();
+    document.getElementById('reqDivisiPemohon').value = currentUser.divisi;
+    loadDashboard();
+  } else {
+    showToast(res.message || 'Gagal membuat request.', 'error');
+  }
+});
+
+// ---------------- DASHBOARD (Job Masuk / Keluar / SLA) ----------------
+
+async function loadDashboard() {
+  const res = await callApi('getDashboard', { divisi: currentUser.divisi, role: currentUser.role });
+  if (!res.success) {
+    showToast(res.message || 'Gagal memuat data.', 'error');
+    return;
+  }
+  renderJobMasuk(res.jobMasuk);
+  renderJobKeluar(res.jobKeluar);
+  if (currentUser.role === 'Admin' && res.sla) {
+    renderSLA(res.sla, res.allJobs);
+  }
+}
+
+function renderJobMasuk(list) {
+  const body = document.getElementById('jobMasukBody');
+  const empty = document.getElementById('jobMasukEmpty');
+  body.innerHTML = '';
+  empty.classList.toggle('hidden', list.length > 0);
+
+  list.forEach(job => {
+    const tr = document.createElement('tr');
+    tr.className = 'border-t border-maroon-50 hover:bg-cream-50';
+    tr.innerHTML = `
+      <td class="px-4 py-3 font-mono text-xs text-maroon-500">${escapeHtml(job.idRequest)}</td>
+      <td class="px-4 py-3">${escapeHtml(job.namaTugas)}</td>
+      <td class="px-4 py-3">${escapeHtml(job.divisiPemohon)}</td>
+      <td class="px-4 py-3">${prioritasBadge(job.prioritas)}</td>
+      <td class="px-4 py-3 text-xs">${formatDate(job.deadline)}</td>
+      <td class="px-4 py-3">${statusBadge(job.status)}</td>
+      <td class="px-4 py-3">
+        <select class="text-xs border border-maroon-200 rounded-lg px-2 py-1.5 focus:outline-none focus:ring-2 focus:ring-gold-500"
+          onchange="updateStatus('${escapeHtml(job.idRequest)}', this.value)">
+          <option value="Pending" ${job.status === 'Pending' ? 'selected' : ''}>Pending</option>
+          <option value="In Progress" ${job.status === 'In Progress' ? 'selected' : ''}>In Progress</option>
+          <option value="Completed" ${job.status === 'Completed' ? 'selected' : ''}>Completed</option>
+        </select>
+      </td>
+    `;
+    body.appendChild(tr);
+  });
+}
+
+function renderJobKeluar(list) {
+  const body = document.getElementById('jobKeluarBody');
+  const empty = document.getElementById('jobKeluarEmpty');
+  body.innerHTML = '';
+  empty.classList.toggle('hidden', list.length > 0);
+
+  list.forEach(job => {
+    const tr = document.createElement('tr');
+    tr.className = 'border-t border-maroon-50 hover:bg-cream-50';
+    tr.innerHTML = `
+      <td class="px-4 py-3 font-mono text-xs text-maroon-500">${escapeHtml(job.idRequest)}</td>
+      <td class="px-4 py-3">${escapeHtml(job.namaTugas)}</td>
+      <td class="px-4 py-3">${escapeHtml(job.divisiTujuan)}</td>
+      <td class="px-4 py-3">${prioritasBadge(job.prioritas)}</td>
+      <td class="px-4 py-3 text-xs">${formatDate(job.deadline)}</td>
+      <td class="px-4 py-3">${statusBadge(job.status)}</td>
+    `;
+    body.appendChild(tr);
+  });
+}
+
+function renderSLA(sla, allJobs) {
+  document.getElementById('slaTotal').textContent = sla.totalTiket;
+  document.getElementById('slaPending').textContent = sla.totalPending;
+  document.getElementById('slaSelesai').textContent = sla.totalSelesai;
+  document.getElementById('slaOverdue').textContent = sla.totalOverdue;
+
+  const body = document.getElementById('slaAllBody');
+  body.innerHTML = '';
+  allJobs.forEach(job => {
+    const tr = document.createElement('tr');
+    tr.className = 'border-t border-maroon-50 hover:bg-cream-50';
+    tr.innerHTML = `
+      <td class="px-4 py-3 font-mono text-xs text-maroon-500">${escapeHtml(job.idRequest)}</td>
+      <td class="px-4 py-3">${escapeHtml(job.namaTugas)}</td>
+      <td class="px-4 py-3">${escapeHtml(job.divisiPemohon)}</td>
+      <td class="px-4 py-3">${escapeHtml(job.divisiTujuan)}</td>
+      <td class="px-4 py-3 text-xs">${formatDate(job.deadline)}</td>
+      <td class="px-4 py-3">${statusBadge(job.status)}</td>
+    `;
+    body.appendChild(tr);
+  });
+}
+
+async function updateStatus(id, newStatus) {
+  const res = await callApi('updateStatus', { id, newStatus });
+  if (res.success) {
+    showToast('Status tiket ' + id + ' diperbarui.');
+    loadDashboard();
+  } else {
+    showToast(res.message || 'Gagal memperbarui status.', 'error');
+  }
+}
+
+// ---------------- CHANGE PASSWORD ----------------
+
+document.getElementById('changePasswordForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const oldPassword = document.getElementById('oldPassword').value;
+  const newPassword = document.getElementById('newPassword').value;
+
+  const res = await callApi('changePassword', { email: currentUser.email, oldPassword, newPassword });
+  if (res.success) {
+    showToast('Password berhasil diubah.');
+    document.getElementById('changePasswordForm').reset();
+  } else {
+    showToast(res.message || 'Gagal mengubah password.', 'error');
+  }
+});
+
+// ---------------- INIT ----------------
+
+(function init() {
+  const session = getSession();
+  if (session) {
+    currentUser = session;
+    enterApp();
+  }
+})();
+</script>
+</body>
+</html>
