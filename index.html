@@ -26,113 +26,110 @@
   }
 </script>
 <style>
-  body { font-family: 'Poppins', sans-serif; }
-  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  body { font-family: 'Poppins', sans-serif; font-size: 14px; }
+  ::-webkit-scrollbar { width: 7px; height: 7px; }
   ::-webkit-scrollbar-thumb { background: #A53A4D; border-radius: 8px; }
   ::-webkit-scrollbar-track { background: #F7F1E6; }
-  .fade-in { animation: fadeIn .25s ease-out; }
+  .fade-in { animation: fadeIn .2s ease-out; }
   @keyframes fadeIn { from { opacity:0; transform: translateY(4px);} to {opacity:1; transform:translateY(0);} }
   .spinner {
-    border: 3px solid rgba(255,255,255,.3);
-    border-top-color: #fff;
-    border-radius: 50%;
-    width: 20px; height: 20px;
-    animation: spin .7s linear infinite;
+    border: 3px solid rgba(255,255,255,.3); border-top-color: #fff; border-radius: 50%;
+    width: 18px; height: 18px; animation: spin .7s linear infinite;
   }
   @keyframes spin { to { transform: rotate(360deg); } }
 </style>
 </head>
-<body class="bg-cream-100 text-gray-800 min-h-screen">
+<body class="bg-cream-100 text-gray-800 min-h-screen text-sm">
 
-<div id="toast" class="fixed top-5 right-5 z-50 hidden max-w-sm px-4 py-3 rounded-xl shadow-lg text-sm font-medium fade-in"></div>
+<div id="toast" class="fixed top-4 right-4 z-50 hidden max-w-xs px-3.5 py-2.5 rounded-lg shadow-lg text-xs font-medium fade-in"></div>
 
 <div id="loadingOverlay" class="fixed inset-0 bg-maroon-950/40 backdrop-blur-sm z-50 hidden flex items-center justify-center">
-  <div class="bg-white rounded-2xl px-6 py-4 shadow-xl flex items-center gap-3">
+  <div class="bg-white rounded-xl px-5 py-3.5 shadow-xl flex items-center gap-3">
     <div class="spinner !border-maroon-200 !border-t-maroon-700"></div>
-    <span class="text-maroon-800 font-medium text-sm">Memproses...</span>
+    <span class="text-maroon-800 font-medium text-xs">Memproses...</span>
   </div>
 </div>
 
 <!-- ==================== LOGIN SCREEN ==================== -->
 <div id="loginScreen" class="min-h-screen flex items-center justify-center px-4 bg-gradient-to-br from-maroon-950 via-maroon-800 to-maroon-700">
-  <div class="w-full max-w-md bg-cream-50 rounded-2xl shadow-2xl p-8 fade-in">
-    <div class="text-center mb-8">
-      <div class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-maroon-200 flex items-center justify-center shadow-sm">
-        <svg width="32" height="32" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <div class="w-full max-w-sm bg-cream-50 rounded-xl shadow-2xl p-7 fade-in">
+    <div class="text-center mb-6">
+      <div class="w-14 h-14 mx-auto mb-3 rounded-xl bg-maroon-200 flex items-center justify-center shadow-sm">
+        <svg width="28" height="28" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M12 21l5 5 11-11" stroke="#4A1620" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </div>
-      <h1 class="text-xl font-bold text-maroon-900">Portal Internal</h1>
-      <p class="text-sm text-gray-500 mt-1">Job Request & Ticketing System</p>
+      <h1 class="text-lg font-bold text-maroon-900">Portal Internal</h1>
+      <p class="text-xs text-gray-500 mt-1">Job Request & Ticketing System</p>
     </div>
 
-    <form id="loginForm" class="space-y-4">
+    <form id="loginForm" class="space-y-3.5">
       <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">Email atau NIK Karyawan</label>
+        <label class="block text-xs font-medium text-gray-700 mb-1">Email atau NIK Karyawan</label>
         <input type="text" id="loginIdentifier" required
-          class="w-full px-4 py-2.5 rounded-lg border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-maroon-500 focus:border-transparent text-sm"
+          class="w-full px-3.5 py-2 rounded-lg border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-maroon-500 focus:border-transparent text-sm"
           placeholder="nama@perusahaan.com atau NIK">
       </div>
       <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+        <label class="block text-xs font-medium text-gray-700 mb-1">Password</label>
         <input type="password" id="loginPassword" required
-          class="w-full px-4 py-2.5 rounded-lg border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-maroon-500 focus:border-transparent text-sm"
+          class="w-full px-3.5 py-2 rounded-lg border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-maroon-500 focus:border-transparent text-sm"
           placeholder="••••••••">
       </div>
       <button type="submit"
-        class="w-full bg-maroon-900 hover:bg-maroon-950 text-white font-semibold py-2.5 rounded-lg transition shadow-md">
+        class="w-full bg-maroon-900 hover:bg-maroon-950 text-white font-semibold py-2.5 rounded-lg transition shadow-md text-sm">
         Masuk
       </button>
-      <p id="loginError" class="text-sm text-red-600 text-center hidden"></p>
+      <p id="loginError" class="text-xs text-red-600 text-center hidden"></p>
     </form>
   </div>
 </div>
 
-<!-- ==================== APP SCREEN (SIDEBAR LAYOUT) ==================== -->
+<!-- ==================== APP SCREEN ==================== -->
 <div id="appScreen" class="hidden min-h-screen flex">
 
   <div id="sidebarOverlay" class="fixed inset-0 bg-black/40 z-30 hidden lg:hidden"></div>
 
-  <aside id="sidebar" class="fixed lg:sticky top-0 left-0 h-screen w-64 bg-maroon-950 text-white flex flex-col z-40 -translate-x-full lg:translate-x-0 transition-transform duration-200">
-    <div class="px-5 py-6 flex items-center gap-3 border-b border-white/10">
-      <div class="w-10 h-10 rounded-xl bg-maroon-200 flex items-center justify-center flex-shrink-0">
-        <svg width="20" height="20" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <aside id="sidebar" class="fixed lg:sticky top-0 left-0 h-screen w-56 bg-maroon-950 text-white flex flex-col z-40 -translate-x-full lg:translate-x-0 transition-transform duration-200">
+    <div class="px-4 py-5 flex items-center gap-2.5 border-b border-white/10">
+      <div class="w-9 h-9 rounded-lg bg-maroon-200 flex items-center justify-center flex-shrink-0">
+        <svg width="18" height="18" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M12 21l5 5 11-11" stroke="#4A1620" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </div>
       <div>
-        <p class="font-bold leading-tight text-sm">Portal Internal</p>
-        <p class="text-xs text-white/50 leading-tight">Job Ticketing</p>
+        <p class="font-bold leading-tight text-xs">Portal Internal</p>
+        <p class="text-[10px] text-white/50 leading-tight">Job Ticketing</p>
       </div>
     </div>
 
-    <nav class="flex-1 px-3 py-5 space-y-1 overflow-y-auto">
-      <button data-tab="buatRequest" class="nav-btn w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium text-left transition">
+    <nav class="flex-1 px-2.5 py-4 space-y-0.5 overflow-y-auto">
+      <button data-tab="buatRequest" class="nav-btn w-full flex items-center gap-2.5 px-3.5 py-2 rounded-lg text-xs font-medium text-left transition">
         <span>📝</span> Buat Request
       </button>
-      <button data-tab="jobMasuk" class="nav-btn w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium text-left transition">
+      <button data-tab="jobMasuk" class="nav-btn w-full flex items-center gap-2.5 px-3.5 py-2 rounded-lg text-xs font-medium text-left transition">
         <span>📥</span> Job Masuk
       </button>
-      <button data-tab="jobKeluar" class="nav-btn w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium text-left transition">
+      <button data-tab="jobKeluar" class="nav-btn w-full flex items-center gap-2.5 px-3.5 py-2 rounded-lg text-xs font-medium text-left transition">
         <span>📤</span> Job Keluar
       </button>
-      <button data-tab="catatanInternal" class="nav-btn w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium text-left transition">
+      <button data-tab="catatanInternal" class="nav-btn w-full flex items-center gap-2.5 px-3.5 py-2 rounded-lg text-xs font-medium text-left transition">
         <span>🗒️</span> Catatan Internal
       </button>
-      <button data-tab="dashboardSLA" id="tabSLABtn" class="nav-btn hidden w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium text-left transition">
+      <button data-tab="dashboardSLA" id="tabSLABtn" class="nav-btn hidden w-full flex items-center gap-2.5 px-3.5 py-2 rounded-lg text-xs font-medium text-left transition">
         <span>📊</span> Dashboard SLA
       </button>
-      <button data-tab="gantiPassword" class="nav-btn w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium text-left transition">
+      <button data-tab="gantiPassword" class="nav-btn w-full flex items-center gap-2.5 px-3.5 py-2 rounded-lg text-xs font-medium text-left transition">
         <span>🔒</span> Ganti Password
       </button>
     </nav>
 
-    <div class="px-3 py-4 border-t border-white/10">
-      <div class="px-3 mb-3">
-        <p class="text-sm font-medium truncate" id="userNameLabel"></p>
-        <p class="text-xs text-white/50" id="userDivisiRoleLabel"></p>
+    <div class="px-2.5 py-3 border-t border-white/10">
+      <div class="px-3 mb-2.5">
+        <p class="text-xs font-medium truncate" id="userNameLabel"></p>
+        <p class="text-[10px] text-white/50" id="userDivisiRoleLabel"></p>
       </div>
-      <button id="logoutBtn" class="w-full bg-white/10 hover:bg-white/20 text-white text-sm font-medium py-2 rounded-lg transition">
+      <button id="logoutBtn" class="w-full bg-white/10 hover:bg-white/20 text-white text-xs font-medium py-1.5 rounded-lg transition">
         Keluar
       </button>
     </div>
@@ -140,39 +137,39 @@
 
   <div class="flex-1 min-w-0">
     <header class="bg-white border-b border-gray-100 sticky top-0 z-20">
-      <div class="px-5 lg:px-8 py-5 flex items-center justify-between">
-        <div class="flex items-center gap-3">
-          <button id="sidebarToggle" class="lg:hidden text-gray-500 text-xl">☰</button>
-          <h1 class="text-xl font-bold text-gray-900" id="pageTitle">Buat Request</h1>
+      <div class="px-4 lg:px-7 py-3.5 flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <button id="sidebarToggle" class="lg:hidden text-gray-500 text-lg">☰</button>
+          <h1 class="text-base font-bold text-gray-900" id="pageTitle">Buat Request</h1>
         </div>
-        <button onclick="loadDashboard()" class="text-sm text-gray-500 hover:text-maroon-700 flex items-center gap-1.5 transition">
+        <button onclick="loadDashboard()" class="text-xs text-gray-500 hover:text-maroon-700 flex items-center gap-1.5 transition">
           <span>🔄</span> Refresh Data
         </button>
       </div>
     </header>
 
-    <main class="px-5 lg:px-8 py-6">
+    <main class="px-4 lg:px-7 py-5">
 
       <!-- TAB: Buat Request -->
       <section id="tab-buatRequest" class="tab-content fade-in">
-        <div class="bg-white rounded-2xl shadow-sm p-6">
-          <p class="text-sm text-gray-500 mb-5">Kirim permintaan tugas ke satu atau beberapa divisi sekaligus.</p>
-          <form id="requestForm" class="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div class="bg-white rounded-xl shadow-sm p-5">
+          <p class="text-xs text-gray-500 mb-4">Kirim permintaan tugas ke satu atau beberapa divisi sekaligus.</p>
+          <form id="requestForm" class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">Divisi Pemohon</label>
+              <label class="block text-xs font-medium text-gray-700 mb-1">Divisi Pemohon</label>
               <input type="text" id="reqDivisiPemohon" disabled
-                class="w-full px-4 py-2.5 rounded-lg border border-gray-200 bg-gray-100 text-sm text-gray-500">
+                class="w-full px-3.5 py-2 rounded-lg border border-gray-200 bg-gray-100 text-sm text-gray-500">
             </div>
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">Nama Tugas</label>
+              <label class="block text-xs font-medium text-gray-700 mb-1">Nama Tugas</label>
               <input type="text" id="reqNamaTugas" required
-                class="w-full px-4 py-2.5 rounded-lg border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-maroon-500 focus:border-transparent text-sm"
+                class="w-full px-3.5 py-2 rounded-lg border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-maroon-500 focus:border-transparent text-sm"
                 placeholder="Contoh: Perbaikan AC ruang meeting">
             </div>
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">Prioritas</label>
+              <label class="block text-xs font-medium text-gray-700 mb-1">Prioritas</label>
               <select id="reqPrioritas" required
-                class="w-full px-4 py-2.5 rounded-lg border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-maroon-500 focus:border-transparent text-sm">
+                class="w-full px-3.5 py-2 rounded-lg border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-maroon-500 focus:border-transparent text-sm">
                 <option value="Rendah">Rendah</option>
                 <option value="Sedang" selected>Sedang</option>
                 <option value="Tinggi">Tinggi</option>
@@ -180,39 +177,39 @@
               </select>
             </div>
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">Deadline (opsional)</label>
+              <label class="block text-xs font-medium text-gray-700 mb-1">Deadline (opsional)</label>
               <input type="datetime-local" id="reqDeadline"
-                class="w-full px-4 py-2.5 rounded-lg border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-maroon-500 focus:border-transparent text-sm">
+                class="w-full px-3.5 py-2 rounded-lg border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-maroon-500 focus:border-transparent text-sm">
             </div>
 
             <div class="md:col-span-2">
-              <label class="block text-sm font-medium text-gray-700 mb-1">Divisi Tujuan (bisa pilih lebih dari satu)</label>
-              <label class="flex items-center gap-2 text-sm font-medium text-maroon-700 mb-2">
+              <label class="block text-xs font-medium text-gray-700 mb-1">Divisi Tujuan (bisa pilih lebih dari satu)</label>
+              <label class="flex items-center gap-2 text-xs font-medium text-maroon-700 mb-1.5">
                 <input type="checkbox" id="reqSelectAllDivisi" class="rounded border-gray-300 text-maroon-700 focus:ring-maroon-500">
                 Pilih Semua Divisi
               </label>
-              <div id="reqDivisiCheckboxContainer" class="border border-gray-200 rounded-lg p-3 max-h-48 overflow-y-auto space-y-2 bg-gray-50">
-                <p class="text-xs text-gray-400">Memuat daftar divisi...</p>
+              <div id="reqDivisiCheckboxContainer" class="border border-gray-200 rounded-lg p-2.5 max-h-40 overflow-y-auto space-y-1.5 bg-gray-50 text-xs">
+                <p class="text-gray-400">Memuat daftar divisi...</p>
               </div>
             </div>
 
             <div class="md:col-span-2">
-              <label class="flex items-center gap-2 text-sm text-gray-600">
+              <label class="flex items-center gap-2 text-xs text-gray-600">
                 <input type="checkbox" id="reqWithMeet" class="rounded border-gray-300 text-maroon-700 focus:ring-maroon-500">
                 Sertakan link Google Meet pada undangan kalender
               </label>
             </div>
 
             <div class="md:col-span-2">
-              <label class="block text-sm font-medium text-gray-700 mb-1">Rincian Tugas</label>
-              <textarea id="reqRincian" required rows="4"
-                class="w-full px-4 py-2.5 rounded-lg border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-maroon-500 focus:border-transparent text-sm"
+              <label class="block text-xs font-medium text-gray-700 mb-1">Rincian Tugas</label>
+              <textarea id="reqRincian" required rows="3"
+                class="w-full px-3.5 py-2 rounded-lg border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-maroon-500 focus:border-transparent text-sm"
                 placeholder="Jelaskan detail tugas yang diminta..."></textarea>
             </div>
 
             <div class="md:col-span-2">
               <button type="submit"
-                class="bg-maroon-900 hover:bg-maroon-950 text-white font-semibold px-6 py-2.5 rounded-lg transition shadow-md">
+                class="bg-maroon-900 hover:bg-maroon-950 text-white font-semibold px-5 py-2 rounded-lg transition shadow-md text-sm">
                 Kirim Request
               </button>
             </div>
@@ -222,12 +219,31 @@
 
       <!-- TAB: Job Masuk -->
       <section id="tab-jobMasuk" class="tab-content hidden fade-in">
-        <div class="bg-white rounded-2xl shadow-sm overflow-hidden">
-          <div class="p-5 flex flex-col sm:flex-row gap-3">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
+          <div class="bg-white rounded-xl shadow-sm p-4">
+            <p class="text-[11px] text-gray-400 mb-0.5">Total Masuk</p>
+            <p class="text-xl font-bold text-gray-900" id="kpiMasukTotal">0</p>
+          </div>
+          <div class="bg-white rounded-xl shadow-sm p-4">
+            <p class="text-[11px] text-gray-400 mb-0.5">Belum Selesai</p>
+            <p class="text-xl font-bold text-maroon-600" id="kpiMasukBelum">0</p>
+          </div>
+          <div class="bg-white rounded-xl shadow-sm p-4">
+            <p class="text-[11px] text-gray-400 mb-0.5">Selesai</p>
+            <p class="text-xl font-bold text-green-600" id="kpiMasukSelesai">0</p>
+          </div>
+          <div class="bg-white rounded-xl shadow-sm p-4">
+            <p class="text-[11px] text-gray-400 mb-0.5">Lewat Deadline</p>
+            <p class="text-xl font-bold text-maroon-900" id="kpiMasukOverdue">0</p>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-sm overflow-hidden">
+          <div class="p-4 flex flex-col sm:flex-row gap-2.5">
             <input type="text" id="searchJobMasuk" placeholder="Cari ID, Nama Tugas..."
-              class="flex-1 px-4 py-2.5 rounded-lg border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-maroon-500 focus:border-transparent text-sm">
+              class="flex-1 px-3.5 py-2 rounded-lg border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-maroon-500 focus:border-transparent text-sm">
             <select id="filterStatusMasuk"
-              class="px-4 py-2.5 rounded-lg border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-maroon-500 focus:border-transparent text-sm">
+              class="px-3.5 py-2 rounded-lg border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-maroon-500 focus:border-transparent text-sm">
               <option value="">Semua Status</option>
               <option value="Pending">Pending</option>
               <option value="In Progress">In Progress</option>
@@ -235,79 +251,99 @@
             </select>
           </div>
           <div class="overflow-x-auto">
-            <table class="w-full text-sm">
+            <table class="w-full text-xs">
               <thead>
                 <tr class="border-b border-gray-100">
-                  <th class="px-5 py-3 text-left text-xs font-semibold uppercase text-gray-500">ID / Tipe</th>
-                  <th class="px-5 py-3 text-left text-xs font-semibold uppercase text-gray-500">Tugas</th>
-                  <th class="px-5 py-3 text-left text-xs font-semibold uppercase text-gray-500">Dari Divisi</th>
-                  <th class="px-5 py-3 text-left text-xs font-semibold uppercase text-gray-500">Prioritas</th>
-                  <th class="px-5 py-3 text-left text-xs font-semibold uppercase text-gray-500">Deadline</th>
-                  <th class="px-5 py-3 text-left text-xs font-semibold uppercase text-gray-500">Selesai Pada</th>
-                  <th class="px-5 py-3 text-left text-xs font-semibold uppercase text-gray-500">SLA</th>
-                  <th class="px-5 py-3 text-left text-xs font-semibold uppercase text-gray-500">Status</th>
-                  <th class="px-5 py-3 text-left text-xs font-semibold uppercase text-gray-500">Aksi</th>
+                  <th class="px-4 py-2.5 text-left font-semibold uppercase text-gray-500">ID / Tipe</th>
+                  <th class="px-4 py-2.5 text-left font-semibold uppercase text-gray-500">Tugas</th>
+                  <th class="px-4 py-2.5 text-left font-semibold uppercase text-gray-500">Dari Divisi</th>
+                  <th class="px-4 py-2.5 text-left font-semibold uppercase text-gray-500">Prioritas</th>
+                  <th class="px-4 py-2.5 text-left font-semibold uppercase text-gray-500">Deadline</th>
+                  <th class="px-4 py-2.5 text-left font-semibold uppercase text-gray-500">Selesai Pada</th>
+                  <th class="px-4 py-2.5 text-left font-semibold uppercase text-gray-500">SLA</th>
+                  <th class="px-4 py-2.5 text-left font-semibold uppercase text-gray-500">Status</th>
+                  <th class="px-4 py-2.5 text-left font-semibold uppercase text-gray-500">Aksi</th>
                 </tr>
               </thead>
               <tbody id="jobMasukBody"></tbody>
             </table>
-            <p id="jobMasukEmpty" class="text-center text-sm text-gray-400 py-10 hidden">Tidak ada job masuk.</p>
+            <p id="jobMasukEmpty" class="text-center text-xs text-gray-400 py-8 hidden">Tidak ada job masuk.</p>
           </div>
         </div>
       </section>
 
       <!-- TAB: Job Keluar -->
       <section id="tab-jobKeluar" class="tab-content hidden fade-in">
-        <div class="bg-white rounded-2xl shadow-sm overflow-hidden">
-          <div class="p-5">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
+          <div class="bg-white rounded-xl shadow-sm p-4">
+            <p class="text-[11px] text-gray-400 mb-0.5">Total Dikirim</p>
+            <p class="text-xl font-bold text-gray-900" id="kpiKeluarTotal">0</p>
+          </div>
+          <div class="bg-white rounded-xl shadow-sm p-4">
+            <p class="text-[11px] text-gray-400 mb-0.5">Belum Selesai</p>
+            <p class="text-xl font-bold text-maroon-600" id="kpiKeluarBelum">0</p>
+          </div>
+          <div class="bg-white rounded-xl shadow-sm p-4">
+            <p class="text-[11px] text-gray-400 mb-0.5">Selesai</p>
+            <p class="text-xl font-bold text-green-600" id="kpiKeluarSelesai">0</p>
+          </div>
+          <div class="bg-white rounded-xl shadow-sm p-4">
+            <p class="text-[11px] text-gray-400 mb-0.5">Lewat Deadline</p>
+            <p class="text-xl font-bold text-maroon-900" id="kpiKeluarOverdue">0</p>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-sm overflow-hidden">
+          <div class="p-4">
             <input type="text" id="searchJobKeluar" placeholder="Cari ID, Nama Tugas..."
-              class="w-full sm:w-80 px-4 py-2.5 rounded-lg border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-maroon-500 focus:border-transparent text-sm">
+              class="w-full sm:w-72 px-3.5 py-2 rounded-lg border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-maroon-500 focus:border-transparent text-sm">
           </div>
           <div class="overflow-x-auto">
-            <table class="w-full text-sm">
+            <table class="w-full text-xs">
               <thead>
                 <tr class="border-b border-gray-100">
-                  <th class="px-5 py-3 text-left text-xs font-semibold uppercase text-gray-500">ID</th>
-                  <th class="px-5 py-3 text-left text-xs font-semibold uppercase text-gray-500">Tugas</th>
-                  <th class="px-5 py-3 text-left text-xs font-semibold uppercase text-gray-500">Ke Divisi</th>
-                  <th class="px-5 py-3 text-left text-xs font-semibold uppercase text-gray-500">Prioritas</th>
-                  <th class="px-5 py-3 text-left text-xs font-semibold uppercase text-gray-500">Deadline</th>
-                  <th class="px-5 py-3 text-left text-xs font-semibold uppercase text-gray-500">Selesai Pada</th>
-                  <th class="px-5 py-3 text-left text-xs font-semibold uppercase text-gray-500">SLA</th>
-                  <th class="px-5 py-3 text-left text-xs font-semibold uppercase text-gray-500">Status</th>
-                  <th class="px-5 py-3 text-left text-xs font-semibold uppercase text-gray-500">Aksi</th>
+                  <th class="px-4 py-2.5 text-left font-semibold uppercase text-gray-500">ID</th>
+                  <th class="px-4 py-2.5 text-left font-semibold uppercase text-gray-500">Tugas</th>
+                  <th class="px-4 py-2.5 text-left font-semibold uppercase text-gray-500">Ke Divisi</th>
+                  <th class="px-4 py-2.5 text-left font-semibold uppercase text-gray-500">Prioritas</th>
+                  <th class="px-4 py-2.5 text-left font-semibold uppercase text-gray-500">Deadline</th>
+                  <th class="px-4 py-2.5 text-left font-semibold uppercase text-gray-500">Selesai Pada</th>
+                  <th class="px-4 py-2.5 text-left font-semibold uppercase text-gray-500">SLA</th>
+                  <th class="px-4 py-2.5 text-left font-semibold uppercase text-gray-500">Status</th>
+                  <th class="px-4 py-2.5 text-left font-semibold uppercase text-gray-500">Aksi</th>
                 </tr>
               </thead>
               <tbody id="jobKeluarBody"></tbody>
             </table>
-            <p id="jobKeluarEmpty" class="text-center text-sm text-gray-400 py-10 hidden">Tidak ada job keluar.</p>
+            <p id="jobKeluarEmpty" class="text-center text-xs text-gray-400 py-8 hidden">Tidak ada job keluar.</p>
           </div>
         </div>
       </section>
 
       <!-- TAB: Catatan Internal -->
       <section id="tab-catatanInternal" class="tab-content hidden fade-in">
-        <div class="bg-white rounded-2xl shadow-sm p-6">
-          <p class="text-sm text-gray-500 mb-5">
-            Gunakan ini kalau divisi lain menugaskan sesuatu ke divisi Anda secara lisan/informal
-            (tanpa Job Request resmi di sistem). Tidak ada email yang dikirim.
+        <div class="bg-white rounded-xl shadow-sm p-5 mb-4">
+          <p class="text-xs text-gray-500 mb-4">
+            Gunakan ini kalau divisi lain menugaskan sesuatu ke divisi Anda secara lisan/informal.
+            Catatan ini akan muncul di tab <strong>Job Masuk</strong> Anda (karena divisi Anda yang menerima tugas),
+            dan riwayatnya juga tercatat di bawah form ini. Tidak ada email yang dikirim.
           </p>
-          <form id="internalNoteForm" class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <form id="internalNoteForm" class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">Divisi Asal (yang menugaskan)</label>
+              <label class="block text-xs font-medium text-gray-700 mb-1">Divisi Asal (yang menugaskan)</label>
               <input type="text" id="noteDivisiAsal" required
-                class="w-full px-4 py-2.5 rounded-lg border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-maroon-500 focus:border-transparent text-sm"
+                class="w-full px-3.5 py-2 rounded-lg border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-maroon-500 focus:border-transparent text-sm"
                 placeholder="Contoh: Divisi Operasional">
             </div>
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">Nama Tugas</label>
+              <label class="block text-xs font-medium text-gray-700 mb-1">Nama Tugas</label>
               <input type="text" id="noteNamaTugas" required
-                class="w-full px-4 py-2.5 rounded-lg border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-maroon-500 focus:border-transparent text-sm">
+                class="w-full px-3.5 py-2 rounded-lg border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-maroon-500 focus:border-transparent text-sm">
             </div>
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">Prioritas</label>
+              <label class="block text-xs font-medium text-gray-700 mb-1">Prioritas</label>
               <select id="notePrioritas" required
-                class="w-full px-4 py-2.5 rounded-lg border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-maroon-500 focus:border-transparent text-sm">
+                class="w-full px-3.5 py-2 rounded-lg border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-maroon-500 focus:border-transparent text-sm">
                 <option value="Rendah">Rendah</option>
                 <option value="Sedang" selected>Sedang</option>
                 <option value="Tinggi">Tinggi</option>
@@ -315,94 +351,116 @@
               </select>
             </div>
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">Deadline (opsional)</label>
+              <label class="block text-xs font-medium text-gray-700 mb-1">Deadline (opsional)</label>
               <input type="datetime-local" id="noteDeadline"
-                class="w-full px-4 py-2.5 rounded-lg border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-maroon-500 focus:border-transparent text-sm">
+                class="w-full px-3.5 py-2 rounded-lg border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-maroon-500 focus:border-transparent text-sm">
             </div>
             <div class="md:col-span-2">
-              <label class="flex items-center gap-2 text-sm text-gray-600">
+              <label class="flex items-center gap-2 text-xs text-gray-600">
                 <input type="checkbox" id="noteWithMeet" class="rounded border-gray-300 text-maroon-700 focus:ring-maroon-500">
                 Sertakan link Google Meet pada event kalender pribadi
               </label>
             </div>
             <div class="md:col-span-2">
-              <label class="block text-sm font-medium text-gray-700 mb-1">Rincian Tugas</label>
-              <textarea id="noteRincian" required rows="4"
-                class="w-full px-4 py-2.5 rounded-lg border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-maroon-500 focus:border-transparent text-sm"></textarea>
+              <label class="block text-xs font-medium text-gray-700 mb-1">Rincian Tugas</label>
+              <textarea id="noteRincian" required rows="3"
+                class="w-full px-3.5 py-2 rounded-lg border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-maroon-500 focus:border-transparent text-sm"></textarea>
             </div>
             <div class="md:col-span-2">
               <button type="submit"
-                class="bg-maroon-900 hover:bg-maroon-950 text-white font-semibold px-6 py-2.5 rounded-lg transition shadow-md">
+                class="bg-maroon-900 hover:bg-maroon-950 text-white font-semibold px-5 py-2 rounded-lg transition shadow-md text-sm">
                 Simpan Catatan
               </button>
             </div>
           </form>
         </div>
+
+        <div class="bg-white rounded-xl shadow-sm overflow-hidden">
+          <div class="p-4 border-b border-gray-100">
+            <h3 class="text-xs font-semibold text-gray-700">Riwayat Catatan Internal Divisi Anda</h3>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-xs">
+              <thead>
+                <tr class="border-b border-gray-100">
+                  <th class="px-4 py-2.5 text-left font-semibold uppercase text-gray-500">ID</th>
+                  <th class="px-4 py-2.5 text-left font-semibold uppercase text-gray-500">Tugas</th>
+                  <th class="px-4 py-2.5 text-left font-semibold uppercase text-gray-500">Divisi Asal</th>
+                  <th class="px-4 py-2.5 text-left font-semibold uppercase text-gray-500">Prioritas</th>
+                  <th class="px-4 py-2.5 text-left font-semibold uppercase text-gray-500">Deadline</th>
+                  <th class="px-4 py-2.5 text-left font-semibold uppercase text-gray-500">Status</th>
+                </tr>
+              </thead>
+              <tbody id="internalNoteHistoryBody"></tbody>
+            </table>
+            <p id="internalNoteHistoryEmpty" class="text-center text-xs text-gray-400 py-8 hidden">Belum ada catatan internal yang tercatat.</p>
+          </div>
+        </div>
       </section>
 
       <!-- TAB: Dashboard SLA (Admin) -->
       <section id="tab-dashboardSLA" class="tab-content hidden fade-in">
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-          <div class="bg-white rounded-2xl shadow-sm p-5">
-            <p class="text-xs text-gray-400 mb-1">Total Seluruh Tiket</p>
-            <p class="text-3xl font-bold text-gray-900" id="slaTotal">0</p>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
+          <div class="bg-white rounded-xl shadow-sm p-4">
+            <p class="text-[11px] text-gray-400 mb-0.5">Total Seluruh Tiket</p>
+            <p class="text-xl font-bold text-gray-900" id="slaTotal">0</p>
           </div>
-          <div class="bg-white rounded-2xl shadow-sm p-5">
-            <p class="text-xs text-gray-400 mb-1">Total Pending</p>
-            <p class="text-3xl font-bold text-maroon-600" id="slaPending">0</p>
+          <div class="bg-white rounded-xl shadow-sm p-4">
+            <p class="text-[11px] text-gray-400 mb-0.5">Total Pending</p>
+            <p class="text-xl font-bold text-maroon-600" id="slaPending">0</p>
           </div>
-          <div class="bg-white rounded-2xl shadow-sm p-5">
-            <p class="text-xs text-gray-400 mb-1">Total Selesai</p>
-            <p class="text-3xl font-bold text-green-600" id="slaSelesai">0</p>
+          <div class="bg-white rounded-xl shadow-sm p-4">
+            <p class="text-[11px] text-gray-400 mb-0.5">Total Selesai</p>
+            <p class="text-xl font-bold text-green-600" id="slaSelesai">0</p>
           </div>
-          <div class="bg-white rounded-2xl shadow-sm p-5">
-            <p class="text-xs text-gray-400 mb-1">Lewat Deadline</p>
-            <p class="text-3xl font-bold text-maroon-900" id="slaOverdue">0</p>
+          <div class="bg-white rounded-xl shadow-sm p-4">
+            <p class="text-[11px] text-gray-400 mb-0.5">Lewat Deadline</p>
+            <p class="text-xl font-bold text-maroon-900" id="slaOverdue">0</p>
           </div>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
-          <div class="bg-white rounded-2xl shadow-sm p-5">
-            <h3 class="text-sm font-semibold text-gray-700 mb-3">Distribusi Status Tiket</h3>
-            <div class="relative" style="min-height:220px;">
-              <canvas id="chartStatus" height="220"></canvas>
-              <p id="chartStatusEmpty" class="hidden absolute inset-0 flex items-center justify-center text-sm text-gray-400">Belum ada data.</p>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-3 mb-4">
+          <div class="bg-white rounded-xl shadow-sm p-4">
+            <h3 class="text-xs font-semibold text-gray-700 mb-2.5">Distribusi Status Tiket</h3>
+            <div class="relative" style="min-height:200px;">
+              <canvas id="chartStatus" height="200"></canvas>
+              <p id="chartStatusEmpty" class="hidden absolute inset-0 flex items-center justify-center text-xs text-gray-400">Belum ada data.</p>
             </div>
           </div>
-          <div class="bg-white rounded-2xl shadow-sm p-5">
-            <h3 class="text-sm font-semibold text-gray-700 mb-3">Beban Tiket per Divisi (Aktivitas)</h3>
-            <div class="relative" style="min-height:220px;">
-              <canvas id="chartLoad" height="220"></canvas>
-              <p id="chartLoadEmpty" class="hidden absolute inset-0 flex items-center justify-center text-sm text-gray-400">Belum ada data.</p>
+          <div class="bg-white rounded-xl shadow-sm p-4">
+            <h3 class="text-xs font-semibold text-gray-700 mb-2.5">Beban Tiket per Divisi</h3>
+            <div class="relative" style="min-height:200px;">
+              <canvas id="chartLoad" height="200"></canvas>
+              <p id="chartLoadEmpty" class="hidden absolute inset-0 flex items-center justify-center text-xs text-gray-400">Belum ada data.</p>
             </div>
           </div>
         </div>
 
-        <div class="bg-white rounded-2xl shadow-sm p-5 mb-6">
-          <h3 class="text-sm font-semibold text-gray-700 mb-3">Ketepatan SLA per Divisi (Tepat Waktu vs Terlambat)</h3>
-          <div class="relative" style="min-height:220px;">
-            <canvas id="chartSla" height="220"></canvas>
-            <p id="chartSlaEmpty" class="hidden absolute inset-0 flex items-center justify-center text-sm text-gray-400">Belum ada tiket dengan deadline yang selesai/lewat.</p>
+        <div class="bg-white rounded-xl shadow-sm p-4 mb-4">
+          <h3 class="text-xs font-semibold text-gray-700 mb-2.5">Ketepatan SLA per Divisi</h3>
+          <div class="relative" style="min-height:200px;">
+            <canvas id="chartSla" height="200"></canvas>
+            <p id="chartSlaEmpty" class="hidden absolute inset-0 flex items-center justify-center text-xs text-gray-400">Belum ada tiket dengan deadline yang selesai/lewat.</p>
           </div>
         </div>
 
-        <div class="bg-white rounded-2xl shadow-sm overflow-hidden">
-          <div class="p-5">
+        <div class="bg-white rounded-xl shadow-sm overflow-hidden">
+          <div class="p-4">
             <input type="text" id="searchSLA" placeholder="Cari ID, Nama Tugas..."
-              class="w-full sm:w-80 px-4 py-2.5 rounded-lg border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-maroon-500 focus:border-transparent text-sm">
+              class="w-full sm:w-72 px-3.5 py-2 rounded-lg border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-maroon-500 focus:border-transparent text-sm">
           </div>
           <div class="overflow-x-auto">
-            <table class="w-full text-sm">
+            <table class="w-full text-xs">
               <thead>
                 <tr class="border-b border-gray-100">
-                  <th class="px-5 py-3 text-left text-xs font-semibold uppercase text-gray-500">ID / Tipe</th>
-                  <th class="px-5 py-3 text-left text-xs font-semibold uppercase text-gray-500">Tugas</th>
-                  <th class="px-5 py-3 text-left text-xs font-semibold uppercase text-gray-500">Pemohon</th>
-                  <th class="px-5 py-3 text-left text-xs font-semibold uppercase text-gray-500">Tujuan</th>
-                  <th class="px-5 py-3 text-left text-xs font-semibold uppercase text-gray-500">Deadline</th>
-                  <th class="px-5 py-3 text-left text-xs font-semibold uppercase text-gray-500">Selesai Pada</th>
-                  <th class="px-5 py-3 text-left text-xs font-semibold uppercase text-gray-500">SLA</th>
-                  <th class="px-5 py-3 text-left text-xs font-semibold uppercase text-gray-500">Status</th>
+                  <th class="px-4 py-2.5 text-left font-semibold uppercase text-gray-500">ID / Tipe</th>
+                  <th class="px-4 py-2.5 text-left font-semibold uppercase text-gray-500">Tugas</th>
+                  <th class="px-4 py-2.5 text-left font-semibold uppercase text-gray-500">Pemohon</th>
+                  <th class="px-4 py-2.5 text-left font-semibold uppercase text-gray-500">Tujuan</th>
+                  <th class="px-4 py-2.5 text-left font-semibold uppercase text-gray-500">Deadline</th>
+                  <th class="px-4 py-2.5 text-left font-semibold uppercase text-gray-500">Selesai Pada</th>
+                  <th class="px-4 py-2.5 text-left font-semibold uppercase text-gray-500">SLA</th>
+                  <th class="px-4 py-2.5 text-left font-semibold uppercase text-gray-500">Status</th>
                 </tr>
               </thead>
               <tbody id="slaAllBody"></tbody>
@@ -413,22 +471,22 @@
 
       <!-- TAB: Ganti Password -->
       <section id="tab-gantiPassword" class="tab-content hidden fade-in">
-        <div class="bg-white rounded-2xl shadow-sm p-6">
-          <div class="max-w-md mx-auto">
-            <p class="text-sm text-gray-500 mb-5">Perbarui password akun Anda.</p>
-            <form id="changePasswordForm" class="space-y-4">
+        <div class="bg-white rounded-xl shadow-sm p-5">
+          <div class="max-w-sm mx-auto">
+            <p class="text-xs text-gray-500 mb-4">Perbarui password akun Anda.</p>
+            <form id="changePasswordForm" class="space-y-3.5">
               <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Password Lama</label>
+                <label class="block text-xs font-medium text-gray-700 mb-1">Password Lama</label>
                 <input type="password" id="oldPassword" required
-                  class="w-full px-4 py-2.5 rounded-lg border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-maroon-500 focus:border-transparent text-sm">
+                  class="w-full px-3.5 py-2 rounded-lg border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-maroon-500 focus:border-transparent text-sm">
               </div>
               <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Password Baru</label>
+                <label class="block text-xs font-medium text-gray-700 mb-1">Password Baru</label>
                 <input type="password" id="newPassword" required
-                  class="w-full px-4 py-2.5 rounded-lg border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-maroon-500 focus:border-transparent text-sm">
+                  class="w-full px-3.5 py-2 rounded-lg border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-maroon-500 focus:border-transparent text-sm">
               </div>
               <button type="submit"
-                class="bg-maroon-900 hover:bg-maroon-950 text-white font-semibold px-6 py-2.5 rounded-lg transition shadow-md">
+                class="bg-maroon-900 hover:bg-maroon-950 text-white font-semibold px-5 py-2 rounded-lg transition shadow-md text-sm">
                 Simpan Password
               </button>
             </form>
@@ -456,7 +514,7 @@ const TAB_TITLES = {
 function showToast(message, type = 'success') {
   const toast = document.getElementById('toast');
   toast.textContent = message;
-  toast.className = 'fixed top-5 right-5 z-50 max-w-sm px-4 py-3 rounded-xl shadow-lg text-sm font-medium fade-in ' +
+  toast.className = 'fixed top-4 right-4 z-50 max-w-xs px-3.5 py-2.5 rounded-lg shadow-lg text-xs font-medium fade-in ' +
     (type === 'success' ? 'bg-green-600 text-white' : 'bg-red-600 text-white');
   toast.classList.remove('hidden');
   setTimeout(() => toast.classList.add('hidden'), 4000);
@@ -479,19 +537,19 @@ function formatDate(iso) {
 function statusBadge(status) {
   const map = { 'Pending': 'bg-amber-50 text-amber-700', 'In Progress': 'bg-blue-50 text-blue-700', 'Completed': 'bg-green-50 text-green-700' };
   const cls = map[status] || 'bg-gray-100 text-gray-600';
-  return `<span class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide ${cls}">${escapeHtml(status)}</span>`;
+  return `<span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wide ${cls}">${escapeHtml(status)}</span>`;
 }
 
 function tipeBadge(tipe) {
-  if (tipe === 'Internal') return `<span class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide bg-maroon-900 text-white">Internal</span>`;
-  return `<span class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide bg-maroon-100 text-maroon-700">Request</span>`;
+  if (tipe === 'Internal') return `<span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wide bg-maroon-900 text-white">Internal</span>`;
+  return `<span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wide bg-maroon-100 text-maroon-700">Request</span>`;
 }
 
 function slaBadge(slaStatus) {
-  if (!slaStatus) return '<span class="text-xs text-gray-300">-</span>';
+  if (!slaStatus) return '<span class="text-[10px] text-gray-300">-</span>';
   const map = { 'Tepat Waktu': 'bg-green-50 text-green-700', 'Terlambat': 'bg-maroon-900 text-white', 'Lewat Deadline': 'bg-maroon-900 text-white' };
   const cls = map[slaStatus] || 'bg-gray-100 text-gray-600';
-  return `<span class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide ${cls}">${escapeHtml(slaStatus)}</span>`;
+  return `<span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wide ${cls}">${escapeHtml(slaStatus)}</span>`;
 }
 
 function prioritasBadge(p) {
@@ -508,7 +566,6 @@ async function callApi(action, payload = {}) {
       body: JSON.stringify({ action, ...payload })
     });
     const json = await res.json();
-    // Debug: buka Console (F12) untuk melihat respons mentah dari backend jika ada masalah.
     console.log('API [' + action + ']', json);
     return json;
   } catch (err) {
@@ -596,13 +653,13 @@ function switchTab(tabName) {
 
 async function loadDivisiList() {
   const container = document.getElementById('reqDivisiCheckboxContainer');
-  container.innerHTML = '<p class="text-xs text-gray-400">Memuat daftar divisi...</p>';
+  container.innerHTML = '<p class="text-gray-400">Memuat daftar divisi...</p>';
 
   const res = await callApi('getDivisiList');
   container.innerHTML = '';
 
   if (!res.success) {
-    container.innerHTML = `<p class="text-xs text-red-500">Gagal memuat daftar divisi: ${escapeHtml(res.message || 'Tidak diketahui')}</p>`;
+    container.innerHTML = `<p class="text-red-500">Gagal memuat daftar divisi: ${escapeHtml(res.message || 'Tidak diketahui')}</p>`;
     showToast(res.message || 'Gagal memuat daftar divisi.', 'error');
     return;
   }
@@ -610,13 +667,13 @@ async function loadDivisiList() {
   const others = res.divisiList.filter(d => d.toLowerCase() !== (currentUser.divisi || '').toLowerCase());
 
   if (others.length === 0) {
-    container.innerHTML = '<p class="text-xs text-gray-400">Tidak ada divisi lain yang terdaftar di Master_User.</p>';
+    container.innerHTML = '<p class="text-gray-400">Tidak ada divisi lain yang terdaftar di Master_User.</p>';
     return;
   }
 
   others.forEach(d => {
     const wrapper = document.createElement('label');
-    wrapper.className = 'flex items-center gap-2 text-sm text-gray-700';
+    wrapper.className = 'flex items-center gap-2 text-gray-700';
     wrapper.innerHTML = `<input type="checkbox" class="divisi-checkbox rounded border-gray-300 text-maroon-700 focus:ring-maroon-500" value="${escapeHtml(d)}"> ${escapeHtml(d)}`;
     container.appendChild(wrapper);
   });
@@ -673,13 +730,60 @@ document.getElementById('internalNoteForm').addEventListener('submit', async (e)
 
   const res = await callApi('createInternalNote', payload);
   if (res.success) {
-    showToast('Catatan internal berhasil disimpan (' + res.id + ').');
+    showToast(res.message || 'Catatan internal berhasil disimpan.');
     document.getElementById('internalNoteForm').reset();
     loadDashboard();
   } else {
     showToast(res.message || 'Gagal menyimpan catatan.', 'error');
   }
 });
+
+function computeKpi(list) {
+  const now = new Date();
+  const total = list.length;
+  const completed = list.filter(j => j.status === 'Completed').length;
+  const belum = list.filter(j => j.status !== 'Completed').length;
+  const overdue = list.filter(j => j.status !== 'Completed' && j.deadline && new Date(j.deadline) < now).length;
+  return { total, belum, completed, overdue };
+}
+
+function renderKpiMasuk(list) {
+  const k = computeKpi(list);
+  document.getElementById('kpiMasukTotal').textContent = k.total;
+  document.getElementById('kpiMasukBelum').textContent = k.belum;
+  document.getElementById('kpiMasukSelesai').textContent = k.completed;
+  document.getElementById('kpiMasukOverdue').textContent = k.overdue;
+}
+
+function renderKpiKeluar(list) {
+  const k = computeKpi(list);
+  document.getElementById('kpiKeluarTotal').textContent = k.total;
+  document.getElementById('kpiKeluarBelum').textContent = k.belum;
+  document.getElementById('kpiKeluarSelesai').textContent = k.completed;
+  document.getElementById('kpiKeluarOverdue').textContent = k.overdue;
+}
+
+function renderInternalNoteHistory(list) {
+  const internalOnly = list.filter(j => j.tipe === 'Internal');
+  const body = document.getElementById('internalNoteHistoryBody');
+  const empty = document.getElementById('internalNoteHistoryEmpty');
+  body.innerHTML = '';
+  empty.classList.toggle('hidden', internalOnly.length > 0);
+
+  internalOnly.forEach(job => {
+    const tr = document.createElement('tr');
+    tr.className = 'border-b border-gray-100 hover:bg-gray-50 transition';
+    tr.innerHTML = `
+      <td class="px-4 py-3 font-mono text-gray-500">${escapeHtml(job.idRequest)}</td>
+      <td class="px-4 py-3 font-medium text-gray-800">${escapeHtml(job.namaTugas)}</td>
+      <td class="px-4 py-3 text-gray-600">${escapeHtml(job.divisiPemohon)}</td>
+      <td class="px-4 py-3">${prioritasBadge(job.prioritas)}</td>
+      <td class="px-4 py-3 text-gray-500">${formatDate(job.deadline)}</td>
+      <td class="px-4 py-3">${statusBadge(job.status)}</td>
+    `;
+    body.appendChild(tr);
+  });
+}
 
 async function loadDashboard() {
   const res = await callApi('getDashboard', { divisi: currentUser.divisi, role: currentUser.role });
@@ -689,8 +793,13 @@ async function loadDashboard() {
   }
   cachedJobMasuk = res.jobMasuk;
   cachedJobKeluar = res.jobKeluar;
+
   renderJobMasuk(cachedJobMasuk);
   renderJobKeluar(cachedJobKeluar);
+  renderKpiMasuk(cachedJobMasuk);
+  renderKpiKeluar(cachedJobKeluar);
+  renderInternalNoteHistory(cachedJobMasuk);
+
   if (currentUser.role === 'Admin' && res.sla) {
     cachedAllJobs = res.allJobs;
     renderSLA(res.sla, cachedAllJobs);
@@ -707,16 +816,16 @@ function renderJobMasuk(list) {
     const tr = document.createElement('tr');
     tr.className = 'border-b border-gray-100 hover:bg-gray-50 transition';
     tr.innerHTML = `
-      <td class="px-5 py-4"><p class="font-mono text-xs text-gray-500 mb-1">${escapeHtml(job.idRequest)}</p>${tipeBadge(job.tipe)}</td>
-      <td class="px-5 py-4 font-medium text-gray-800">${escapeHtml(job.namaTugas)}</td>
-      <td class="px-5 py-4 text-gray-600">${escapeHtml(job.divisiPemohon)}</td>
-      <td class="px-5 py-4">${prioritasBadge(job.prioritas)}</td>
-      <td class="px-5 py-4 text-xs text-gray-500">${formatDate(job.deadline)}</td>
-      <td class="px-5 py-4 text-xs text-gray-500">${formatDate(job.tanggalSelesai)}</td>
-      <td class="px-5 py-4">${slaBadge(job.slaStatus)}</td>
-      <td class="px-5 py-4">${statusBadge(job.status)}</td>
-      <td class="px-5 py-4">
-        <select class="text-xs border border-gray-200 rounded-lg px-2 py-1.5 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-maroon-500"
+      <td class="px-4 py-3"><p class="font-mono text-gray-500 mb-1">${escapeHtml(job.idRequest)}</p>${tipeBadge(job.tipe)}</td>
+      <td class="px-4 py-3 font-medium text-gray-800">${escapeHtml(job.namaTugas)}</td>
+      <td class="px-4 py-3 text-gray-600">${escapeHtml(job.divisiPemohon)}</td>
+      <td class="px-4 py-3">${prioritasBadge(job.prioritas)}</td>
+      <td class="px-4 py-3 text-gray-500">${formatDate(job.deadline)}</td>
+      <td class="px-4 py-3 text-gray-500">${formatDate(job.tanggalSelesai)}</td>
+      <td class="px-4 py-3">${slaBadge(job.slaStatus)}</td>
+      <td class="px-4 py-3">${statusBadge(job.status)}</td>
+      <td class="px-4 py-3">
+        <select class="border border-gray-200 rounded-lg px-2 py-1 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-maroon-500 text-xs"
           onchange="updateStatus('${escapeHtml(job.idRequest)}', this.value)">
           <option value="Pending" ${job.status === 'Pending' ? 'selected' : ''}>Pending</option>
           <option value="In Progress" ${job.status === 'In Progress' ? 'selected' : ''}>In Progress</option>
@@ -738,18 +847,18 @@ function renderJobKeluar(list) {
     const tr = document.createElement('tr');
     tr.className = 'border-b border-gray-100 hover:bg-gray-50 transition';
     const reminderBtn = job.status !== 'Completed'
-      ? `<button onclick="sendReminder('${escapeHtml(job.idRequest)}')" class="text-xs bg-maroon-100 text-maroon-700 hover:bg-maroon-200 px-3 py-1.5 rounded-lg font-medium transition">Kirim Pengingat</button>`
-      : `<span class="text-xs text-gray-300">-</span>`;
+      ? `<button onclick="sendReminder('${escapeHtml(job.idRequest)}')" class="bg-maroon-100 text-maroon-700 hover:bg-maroon-200 px-2.5 py-1 rounded-lg font-medium transition">Kirim Pengingat</button>`
+      : `<span class="text-gray-300">-</span>`;
     tr.innerHTML = `
-      <td class="px-5 py-4 font-mono text-xs text-gray-500">${escapeHtml(job.idRequest)}</td>
-      <td class="px-5 py-4 font-medium text-gray-800">${escapeHtml(job.namaTugas)}</td>
-      <td class="px-5 py-4 text-gray-600">${escapeHtml(job.divisiTujuan)}</td>
-      <td class="px-5 py-4">${prioritasBadge(job.prioritas)}</td>
-      <td class="px-5 py-4 text-xs text-gray-500">${formatDate(job.deadline)}</td>
-      <td class="px-5 py-4 text-xs text-gray-500">${formatDate(job.tanggalSelesai)}</td>
-      <td class="px-5 py-4">${slaBadge(job.slaStatus)}</td>
-      <td class="px-5 py-4">${statusBadge(job.status)}</td>
-      <td class="px-5 py-4">${reminderBtn}</td>
+      <td class="px-4 py-3 font-mono text-gray-500">${escapeHtml(job.idRequest)}</td>
+      <td class="px-4 py-3 font-medium text-gray-800">${escapeHtml(job.namaTugas)}</td>
+      <td class="px-4 py-3 text-gray-600">${escapeHtml(job.divisiTujuan)}</td>
+      <td class="px-4 py-3">${prioritasBadge(job.prioritas)}</td>
+      <td class="px-4 py-3 text-gray-500">${formatDate(job.deadline)}</td>
+      <td class="px-4 py-3 text-gray-500">${formatDate(job.tanggalSelesai)}</td>
+      <td class="px-4 py-3">${slaBadge(job.slaStatus)}</td>
+      <td class="px-4 py-3">${statusBadge(job.status)}</td>
+      <td class="px-4 py-3">${reminderBtn}</td>
     `;
     body.appendChild(tr);
   });
@@ -772,14 +881,14 @@ function renderSLATable(allJobs) {
     const tr = document.createElement('tr');
     tr.className = 'border-b border-gray-100 hover:bg-gray-50 transition';
     tr.innerHTML = `
-      <td class="px-5 py-4"><p class="font-mono text-xs text-gray-500 mb-1">${escapeHtml(job.idRequest)}</p>${tipeBadge(job.tipe)}</td>
-      <td class="px-5 py-4 font-medium text-gray-800">${escapeHtml(job.namaTugas)}</td>
-      <td class="px-5 py-4 text-gray-600">${escapeHtml(job.divisiPemohon)}</td>
-      <td class="px-5 py-4 text-gray-600">${escapeHtml(job.divisiTujuan)}</td>
-      <td class="px-5 py-4 text-xs text-gray-500">${formatDate(job.deadline)}</td>
-      <td class="px-5 py-4 text-xs text-gray-500">${formatDate(job.tanggalSelesai)}</td>
-      <td class="px-5 py-4">${slaBadge(job.slaStatus)}</td>
-      <td class="px-5 py-4">${statusBadge(job.status)}</td>
+      <td class="px-4 py-3"><p class="font-mono text-gray-500 mb-1">${escapeHtml(job.idRequest)}</p>${tipeBadge(job.tipe)}</td>
+      <td class="px-4 py-3 font-medium text-gray-800">${escapeHtml(job.namaTugas)}</td>
+      <td class="px-4 py-3 text-gray-600">${escapeHtml(job.divisiPemohon)}</td>
+      <td class="px-4 py-3 text-gray-600">${escapeHtml(job.divisiTujuan)}</td>
+      <td class="px-4 py-3 text-gray-500">${formatDate(job.deadline)}</td>
+      <td class="px-4 py-3 text-gray-500">${formatDate(job.tanggalSelesai)}</td>
+      <td class="px-4 py-3">${slaBadge(job.slaStatus)}</td>
+      <td class="px-4 py-3">${statusBadge(job.status)}</td>
     `;
     body.appendChild(tr);
   });
@@ -788,20 +897,17 @@ function renderSLATable(allJobs) {
 function renderCharts(allJobs) {
   const maroonPalette = ['#A53A4D', '#7A2635', '#C15A6E', '#4A1620', '#E8BCB8'];
 
-  // --- Chart 1: Distribusi Status ---
   try {
     const statusCounts = { 'Pending': 0, 'In Progress': 0, 'Completed': 0 };
     allJobs.forEach(j => { if (statusCounts[j.status] !== undefined) statusCounts[j.status]++; });
     const totalStatus = Object.values(statusCounts).reduce((a, b) => a + b, 0);
-
     document.getElementById('chartStatusEmpty').classList.toggle('hidden', totalStatus > 0);
-
     if (window._chartStatus) window._chartStatus.destroy();
     if (totalStatus > 0) {
       window._chartStatus = new Chart(document.getElementById('chartStatus'), {
         type: 'doughnut',
         data: { labels: Object.keys(statusCounts), datasets: [{ data: Object.values(statusCounts), backgroundColor: maroonPalette, borderWidth: 0 }] },
-        options: { plugins: { legend: { position: 'bottom', labels: { font: { family: 'Poppins' } } } } }
+        options: { plugins: { legend: { position: 'bottom', labels: { font: { family: 'Poppins', size: 11 } } } } }
       });
     }
   } catch (err) {
@@ -810,22 +916,16 @@ function renderCharts(allJobs) {
     document.getElementById('chartStatusEmpty').classList.remove('hidden');
   }
 
-  // --- Chart 2: Beban Tiket per Divisi ---
   try {
     const divisiLoadMap = {};
-    allJobs.forEach(j => {
-      const d = j.divisiTujuan || 'Tidak diketahui';
-      divisiLoadMap[d] = (divisiLoadMap[d] || 0) + 1;
-    });
+    allJobs.forEach(j => { const d = j.divisiTujuan || 'Tidak diketahui'; divisiLoadMap[d] = (divisiLoadMap[d] || 0) + 1; });
     const divisiLabels = Object.keys(divisiLoadMap);
-
     document.getElementById('chartLoadEmpty').classList.toggle('hidden', divisiLabels.length > 0);
-
     if (window._chartLoad) window._chartLoad.destroy();
     if (divisiLabels.length > 0) {
       window._chartLoad = new Chart(document.getElementById('chartLoad'), {
         type: 'bar',
-        data: { labels: divisiLabels, datasets: [{ label: 'Jumlah Tiket', data: Object.values(divisiLoadMap), backgroundColor: '#A53A4D', borderRadius: 6 }] },
+        data: { labels: divisiLabels, datasets: [{ label: 'Jumlah Tiket', data: Object.values(divisiLoadMap), backgroundColor: '#A53A4D', borderRadius: 5 }] },
         options: { plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { precision: 0 } } } }
       });
     }
@@ -835,7 +935,6 @@ function renderCharts(allJobs) {
     document.getElementById('chartLoadEmpty').classList.remove('hidden');
   }
 
-  // --- Chart 3: Ketepatan SLA per Divisi ---
   try {
     const slaMap = {};
     allJobs.forEach(j => {
@@ -846,9 +945,7 @@ function renderCharts(allJobs) {
       }
     });
     const slaLabels = Object.keys(slaMap);
-
     document.getElementById('chartSlaEmpty').classList.toggle('hidden', slaLabels.length > 0);
-
     if (window._chartSla) window._chartSla.destroy();
     if (slaLabels.length > 0) {
       window._chartSla = new Chart(document.getElementById('chartSla'), {
@@ -856,8 +953,8 @@ function renderCharts(allJobs) {
         data: {
           labels: slaLabels,
           datasets: [
-            { label: 'Tepat Waktu', data: slaLabels.map(d => slaMap[d].onTime), backgroundColor: '#16a34a', borderRadius: 6 },
-            { label: 'Terlambat', data: slaLabels.map(d => slaMap[d].late), backgroundColor: '#4A1620', borderRadius: 6 }
+            { label: 'Tepat Waktu', data: slaLabels.map(d => slaMap[d].onTime), backgroundColor: '#16a34a', borderRadius: 5 },
+            { label: 'Terlambat', data: slaLabels.map(d => slaMap[d].late), backgroundColor: '#4A1620', borderRadius: 5 }
           ]
         },
         options: { plugins: { legend: { position: 'bottom' } }, scales: { x: { stacked: true }, y: { stacked: true, beginAtZero: true, ticks: { precision: 0 } } } }
