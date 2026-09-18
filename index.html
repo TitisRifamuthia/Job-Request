@@ -3,10 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sistem Job Request & Ticketing Internal</title>
+<title>Sistem Job Request PT.Serasi Manunggal Sejahtera</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script>
   tailwind.config = {
     theme: {
@@ -14,16 +15,9 @@
         fontFamily: { sans: ['Poppins', 'sans-serif'] },
         colors: {
           maroon: {
-            950: '#3D0F14',
-            900: '#4A1620',
-            800: '#5C1D29',
-            700: '#7A2635',
-            600: '#8F2E3F',
-            500: '#A53A4D',
-            400: '#C15A6E',
-            200: '#E8BCB8',
-            100: '#F5E4E7',
-            50:  '#FBF3F4'
+            950: '#3D0F14', 900: '#4A1620', 800: '#5C1D29', 700: '#7A2635',
+            600: '#8F2E3F', 500: '#A53A4D', 400: '#C15A6E', 200: '#E8BCB8',
+            100: '#F5E4E7', 50: '#FBF3F4'
           },
           cream: { 50: '#FDFBF7', 100: '#F7F1E6' }
         }
@@ -64,7 +58,9 @@
   <div class="w-full max-w-md bg-cream-50 rounded-2xl shadow-2xl p-8 fade-in">
     <div class="text-center mb-8">
       <div class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-maroon-200 flex items-center justify-center shadow-sm">
-        <span class="text-maroon-900 font-extrabold text-xl">JT</span>
+        <svg width="32" height="32" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 21l5 5 11-11" stroke="#4A1620" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
       </div>
       <h1 class="text-xl font-bold text-maroon-900">Portal Internal</h1>
       <p class="text-sm text-gray-500 mt-1">Job Request & Ticketing System</p>
@@ -72,10 +68,10 @@
 
     <form id="loginForm" class="space-y-4">
       <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
-        <input type="email" id="loginEmail" required
+        <label class="block text-sm font-medium text-gray-700 mb-1">Email atau NIK Karyawan</label>
+        <input type="text" id="loginIdentifier" required
           class="w-full px-4 py-2.5 rounded-lg border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-maroon-500 focus:border-transparent text-sm"
-          placeholder="nama@perusahaan.com">
+          placeholder="nama@perusahaan.com atau NIK">
       </div>
       <div>
         <label class="block text-sm font-medium text-gray-700 mb-1">Password</label>
@@ -95,14 +91,14 @@
 <!-- ==================== APP SCREEN (SIDEBAR LAYOUT) ==================== -->
 <div id="appScreen" class="hidden min-h-screen flex">
 
-  <!-- Mobile overlay -->
   <div id="sidebarOverlay" class="fixed inset-0 bg-black/40 z-30 hidden lg:hidden"></div>
 
-  <!-- Sidebar -->
   <aside id="sidebar" class="fixed lg:sticky top-0 left-0 h-screen w-64 bg-maroon-950 text-white flex flex-col z-40 -translate-x-full lg:translate-x-0 transition-transform duration-200">
     <div class="px-5 py-6 flex items-center gap-3 border-b border-white/10">
       <div class="w-10 h-10 rounded-xl bg-maroon-200 flex items-center justify-center flex-shrink-0">
-        <span class="text-maroon-900 font-extrabold text-sm">JT</span>
+        <svg width="20" height="20" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 21l5 5 11-11" stroke="#4A1620" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
       </div>
       <div>
         <p class="font-bold leading-tight text-sm">Portal Internal</p>
@@ -142,9 +138,7 @@
     </div>
   </aside>
 
-  <!-- Main content -->
   <div class="flex-1 min-w-0">
-    <!-- Top bar -->
     <header class="bg-white border-b border-gray-100 sticky top-0 z-20">
       <div class="px-5 lg:px-8 py-5 flex items-center justify-between">
         <div class="flex items-center gap-3">
@@ -161,20 +155,13 @@
 
       <!-- TAB: Buat Request -->
       <section id="tab-buatRequest" class="tab-content fade-in">
-        <div class="bg-white rounded-2xl shadow-sm p-6 max-w-2xl">
-          <p class="text-sm text-gray-500 mb-5">Kirim permintaan tugas ke divisi lain.</p>
-          <form id="requestForm" class="space-y-4">
+        <div class="bg-white rounded-2xl shadow-sm p-6">
+          <p class="text-sm text-gray-500 mb-5">Kirim permintaan tugas ke satu atau beberapa divisi sekaligus.</p>
+          <form id="requestForm" class="grid grid-cols-1 md:grid-cols-2 gap-5">
             <div>
               <label class="block text-sm font-medium text-gray-700 mb-1">Divisi Pemohon</label>
               <input type="text" id="reqDivisiPemohon" disabled
                 class="w-full px-4 py-2.5 rounded-lg border border-gray-200 bg-gray-100 text-sm text-gray-500">
-            </div>
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">Divisi Tujuan</label>
-              <select id="reqDivisiTujuan" required
-                class="w-full px-4 py-2.5 rounded-lg border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-maroon-500 focus:border-transparent text-sm">
-                <option value="">-- Pilih Divisi --</option>
-              </select>
             </div>
             <div>
               <label class="block text-sm font-medium text-gray-700 mb-1">Nama Tugas</label>
@@ -182,37 +169,51 @@
                 class="w-full px-4 py-2.5 rounded-lg border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-maroon-500 focus:border-transparent text-sm"
                 placeholder="Contoh: Perbaikan AC ruang meeting">
             </div>
-            <div class="grid grid-cols-2 gap-4">
-              <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Prioritas</label>
-                <select id="reqPrioritas" required
-                  class="w-full px-4 py-2.5 rounded-lg border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-maroon-500 focus:border-transparent text-sm">
-                  <option value="Rendah">Rendah</option>
-                  <option value="Sedang" selected>Sedang</option>
-                  <option value="Tinggi">Tinggi</option>
-                  <option value="Urgent">Urgent</option>
-                </select>
-              </div>
-              <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Deadline (opsional)</label>
-                <input type="datetime-local" id="reqDeadline"
-                  class="w-full px-4 py-2.5 rounded-lg border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-maroon-500 focus:border-transparent text-sm">
-              </div>
-            </div>
-            <label class="flex items-center gap-2 text-sm text-gray-600">
-              <input type="checkbox" id="reqWithMeet" class="rounded border-gray-300 text-maroon-700 focus:ring-maroon-500">
-              Sertakan link Google Meet pada undangan kalender
-            </label>
             <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Prioritas</label>
+              <select id="reqPrioritas" required
+                class="w-full px-4 py-2.5 rounded-lg border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-maroon-500 focus:border-transparent text-sm">
+                <option value="Rendah">Rendah</option>
+                <option value="Sedang" selected>Sedang</option>
+                <option value="Tinggi">Tinggi</option>
+                <option value="Urgent">Urgent</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Deadline (opsional)</label>
+              <input type="datetime-local" id="reqDeadline"
+                class="w-full px-4 py-2.5 rounded-lg border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-maroon-500 focus:border-transparent text-sm">
+            </div>
+
+            <div class="md:col-span-2">
+              <label class="block text-sm font-medium text-gray-700 mb-1">Divisi Tujuan (bisa pilih lebih dari satu)</label>
+              <label class="flex items-center gap-2 text-sm font-medium text-maroon-700 mb-2">
+                <input type="checkbox" id="reqSelectAllDivisi" class="rounded border-gray-300 text-maroon-700 focus:ring-maroon-500">
+                Pilih Semua Divisi
+              </label>
+              <div id="reqDivisiCheckboxContainer" class="border border-gray-200 rounded-lg p-3 max-h-48 overflow-y-auto space-y-2 bg-gray-50"></div>
+            </div>
+
+            <div class="md:col-span-2">
+              <label class="flex items-center gap-2 text-sm text-gray-600">
+                <input type="checkbox" id="reqWithMeet" class="rounded border-gray-300 text-maroon-700 focus:ring-maroon-500">
+                Sertakan link Google Meet pada undangan kalender
+              </label>
+            </div>
+
+            <div class="md:col-span-2">
               <label class="block text-sm font-medium text-gray-700 mb-1">Rincian Tugas</label>
               <textarea id="reqRincian" required rows="4"
                 class="w-full px-4 py-2.5 rounded-lg border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-maroon-500 focus:border-transparent text-sm"
                 placeholder="Jelaskan detail tugas yang diminta..."></textarea>
             </div>
-            <button type="submit"
-              class="bg-maroon-900 hover:bg-maroon-950 text-white font-semibold px-6 py-2.5 rounded-lg transition shadow-md">
-              Kirim Request
-            </button>
+
+            <div class="md:col-span-2">
+              <button type="submit"
+                class="bg-maroon-900 hover:bg-maroon-950 text-white font-semibold px-6 py-2.5 rounded-lg transition shadow-md">
+                Kirim Request
+              </button>
+            </div>
           </form>
         </div>
       </section>
@@ -240,6 +241,8 @@
                   <th class="px-5 py-3 text-left text-xs font-semibold uppercase text-gray-500">Dari Divisi</th>
                   <th class="px-5 py-3 text-left text-xs font-semibold uppercase text-gray-500">Prioritas</th>
                   <th class="px-5 py-3 text-left text-xs font-semibold uppercase text-gray-500">Deadline</th>
+                  <th class="px-5 py-3 text-left text-xs font-semibold uppercase text-gray-500">Selesai Pada</th>
+                  <th class="px-5 py-3 text-left text-xs font-semibold uppercase text-gray-500">SLA</th>
                   <th class="px-5 py-3 text-left text-xs font-semibold uppercase text-gray-500">Status</th>
                   <th class="px-5 py-3 text-left text-xs font-semibold uppercase text-gray-500">Aksi</th>
                 </tr>
@@ -267,7 +270,10 @@
                   <th class="px-5 py-3 text-left text-xs font-semibold uppercase text-gray-500">Ke Divisi</th>
                   <th class="px-5 py-3 text-left text-xs font-semibold uppercase text-gray-500">Prioritas</th>
                   <th class="px-5 py-3 text-left text-xs font-semibold uppercase text-gray-500">Deadline</th>
+                  <th class="px-5 py-3 text-left text-xs font-semibold uppercase text-gray-500">Selesai Pada</th>
+                  <th class="px-5 py-3 text-left text-xs font-semibold uppercase text-gray-500">SLA</th>
                   <th class="px-5 py-3 text-left text-xs font-semibold uppercase text-gray-500">Status</th>
+                  <th class="px-5 py-3 text-left text-xs font-semibold uppercase text-gray-500">Aksi</th>
                 </tr>
               </thead>
               <tbody id="jobKeluarBody"></tbody>
@@ -279,12 +285,12 @@
 
       <!-- TAB: Catatan Internal -->
       <section id="tab-catatanInternal" class="tab-content hidden fade-in">
-        <div class="bg-white rounded-2xl shadow-sm p-6 max-w-2xl">
+        <div class="bg-white rounded-2xl shadow-sm p-6">
           <p class="text-sm text-gray-500 mb-5">
             Gunakan ini kalau divisi lain menugaskan sesuatu ke divisi Anda secara lisan/informal
             (tanpa Job Request resmi di sistem). Tidak ada email yang dikirim.
           </p>
-          <form id="internalNoteForm" class="space-y-4">
+          <form id="internalNoteForm" class="grid grid-cols-1 md:grid-cols-2 gap-5">
             <div>
               <label class="block text-sm font-medium text-gray-700 mb-1">Divisi Asal (yang menugaskan)</label>
               <input type="text" id="noteDivisiAsal" required
@@ -296,36 +302,38 @@
               <input type="text" id="noteNamaTugas" required
                 class="w-full px-4 py-2.5 rounded-lg border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-maroon-500 focus:border-transparent text-sm">
             </div>
-            <div class="grid grid-cols-2 gap-4">
-              <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Prioritas</label>
-                <select id="notePrioritas" required
-                  class="w-full px-4 py-2.5 rounded-lg border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-maroon-500 focus:border-transparent text-sm">
-                  <option value="Rendah">Rendah</option>
-                  <option value="Sedang" selected>Sedang</option>
-                  <option value="Tinggi">Tinggi</option>
-                  <option value="Urgent">Urgent</option>
-                </select>
-              </div>
-              <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Deadline (opsional)</label>
-                <input type="datetime-local" id="noteDeadline"
-                  class="w-full px-4 py-2.5 rounded-lg border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-maroon-500 focus:border-transparent text-sm">
-              </div>
-            </div>
-            <label class="flex items-center gap-2 text-sm text-gray-600">
-              <input type="checkbox" id="noteWithMeet" class="rounded border-gray-300 text-maroon-700 focus:ring-maroon-500">
-              Sertakan link Google Meet pada event kalender pribadi
-            </label>
             <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Prioritas</label>
+              <select id="notePrioritas" required
+                class="w-full px-4 py-2.5 rounded-lg border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-maroon-500 focus:border-transparent text-sm">
+                <option value="Rendah">Rendah</option>
+                <option value="Sedang" selected>Sedang</option>
+                <option value="Tinggi">Tinggi</option>
+                <option value="Urgent">Urgent</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Deadline (opsional)</label>
+              <input type="datetime-local" id="noteDeadline"
+                class="w-full px-4 py-2.5 rounded-lg border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-maroon-500 focus:border-transparent text-sm">
+            </div>
+            <div class="md:col-span-2">
+              <label class="flex items-center gap-2 text-sm text-gray-600">
+                <input type="checkbox" id="noteWithMeet" class="rounded border-gray-300 text-maroon-700 focus:ring-maroon-500">
+                Sertakan link Google Meet pada event kalender pribadi
+              </label>
+            </div>
+            <div class="md:col-span-2">
               <label class="block text-sm font-medium text-gray-700 mb-1">Rincian Tugas</label>
               <textarea id="noteRincian" required rows="4"
                 class="w-full px-4 py-2.5 rounded-lg border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-maroon-500 focus:border-transparent text-sm"></textarea>
             </div>
-            <button type="submit"
-              class="bg-maroon-900 hover:bg-maroon-950 text-white font-semibold px-6 py-2.5 rounded-lg transition shadow-md">
-              Simpan Catatan
-            </button>
+            <div class="md:col-span-2">
+              <button type="submit"
+                class="bg-maroon-900 hover:bg-maroon-950 text-white font-semibold px-6 py-2.5 rounded-lg transition shadow-md">
+                Simpan Catatan
+              </button>
+            </div>
           </form>
         </div>
       </section>
@@ -351,6 +359,22 @@
           </div>
         </div>
 
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
+          <div class="bg-white rounded-2xl shadow-sm p-5">
+            <h3 class="text-sm font-semibold text-gray-700 mb-3">Distribusi Status Tiket</h3>
+            <canvas id="chartStatus" height="220"></canvas>
+          </div>
+          <div class="bg-white rounded-2xl shadow-sm p-5">
+            <h3 class="text-sm font-semibold text-gray-700 mb-3">Beban Tiket per Divisi (Aktivitas)</h3>
+            <canvas id="chartLoad" height="220"></canvas>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-2xl shadow-sm p-5 mb-6">
+          <h3 class="text-sm font-semibold text-gray-700 mb-3">Ketepatan SLA per Divisi (Tepat Waktu vs Terlambat)</h3>
+          <canvas id="chartSla" height="220"></canvas>
+        </div>
+
         <div class="bg-white rounded-2xl shadow-sm overflow-hidden">
           <div class="p-5">
             <input type="text" id="searchSLA" placeholder="Cari ID, Nama Tugas..."
@@ -365,6 +389,8 @@
                   <th class="px-5 py-3 text-left text-xs font-semibold uppercase text-gray-500">Pemohon</th>
                   <th class="px-5 py-3 text-left text-xs font-semibold uppercase text-gray-500">Tujuan</th>
                   <th class="px-5 py-3 text-left text-xs font-semibold uppercase text-gray-500">Deadline</th>
+                  <th class="px-5 py-3 text-left text-xs font-semibold uppercase text-gray-500">Selesai Pada</th>
+                  <th class="px-5 py-3 text-left text-xs font-semibold uppercase text-gray-500">SLA</th>
                   <th class="px-5 py-3 text-left text-xs font-semibold uppercase text-gray-500">Status</th>
                 </tr>
               </thead>
@@ -376,24 +402,26 @@
 
       <!-- TAB: Ganti Password -->
       <section id="tab-gantiPassword" class="tab-content hidden fade-in">
-        <div class="bg-white rounded-2xl shadow-sm p-6 max-w-md">
-          <p class="text-sm text-gray-500 mb-5">Perbarui password akun Anda.</p>
-          <form id="changePasswordForm" class="space-y-4">
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">Password Lama</label>
-              <input type="password" id="oldPassword" required
-                class="w-full px-4 py-2.5 rounded-lg border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-maroon-500 focus:border-transparent text-sm">
-            </div>
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">Password Baru</label>
-              <input type="password" id="newPassword" required
-                class="w-full px-4 py-2.5 rounded-lg border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-maroon-500 focus:border-transparent text-sm">
-            </div>
-            <button type="submit"
-              class="bg-maroon-900 hover:bg-maroon-950 text-white font-semibold px-6 py-2.5 rounded-lg transition shadow-md">
-              Simpan Password
-            </button>
-          </form>
+        <div class="bg-white rounded-2xl shadow-sm p-6">
+          <div class="max-w-md mx-auto">
+            <p class="text-sm text-gray-500 mb-5">Perbarui password akun Anda.</p>
+            <form id="changePasswordForm" class="space-y-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Password Lama</label>
+                <input type="password" id="oldPassword" required
+                  class="w-full px-4 py-2.5 rounded-lg border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-maroon-500 focus:border-transparent text-sm">
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Password Baru</label>
+                <input type="password" id="newPassword" required
+                  class="w-full px-4 py-2.5 rounded-lg border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-maroon-500 focus:border-transparent text-sm">
+              </div>
+              <button type="submit"
+                class="bg-maroon-900 hover:bg-maroon-950 text-white font-semibold px-6 py-2.5 rounded-lg transition shadow-md">
+                Simpan Password
+              </button>
+            </form>
+          </div>
         </div>
       </section>
 
@@ -402,9 +430,6 @@
 </div>
 
 <script>
-/* ============================================================
-   URL Web App Apps Script Anda
-   ============================================================ */
 const API_URL = 'https://script.google.com/macros/s/AKfycbzULQkTXxMqCGjsGb4AUAnu3UrJ8FQChjsD20HEiYDZ60TXjy81CmdXn7sU9BlLtEjOSQ/exec';
 
 let currentUser = null;
@@ -413,12 +438,8 @@ let cachedJobKeluar = [];
 let cachedAllJobs = [];
 
 const TAB_TITLES = {
-  buatRequest: 'Buat Request',
-  jobMasuk: 'Job Masuk',
-  jobKeluar: 'Job Keluar',
-  catatanInternal: 'Catatan Internal',
-  dashboardSLA: 'Dashboard SLA',
-  gantiPassword: 'Ganti Password'
+  buatRequest: 'Buat Request', jobMasuk: 'Job Masuk', jobKeluar: 'Job Keluar',
+  catatanInternal: 'Catatan Internal', dashboardSLA: 'Dashboard SLA', gantiPassword: 'Ganti Password'
 };
 
 function showToast(message, type = 'success') {
@@ -430,15 +451,11 @@ function showToast(message, type = 'success') {
   setTimeout(() => toast.classList.add('hidden'), 3500);
 }
 
-function setLoading(state) {
-  document.getElementById('loadingOverlay').classList.toggle('hidden', !state);
-}
+function setLoading(state) { document.getElementById('loadingOverlay').classList.toggle('hidden', !state); }
 
 function escapeHtml(str) {
   if (str === null || str === undefined) return '';
-  return str.toString()
-    .replace(/&/g, '&amp;').replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  return str.toString().replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 
 function formatDate(iso) {
@@ -449,29 +466,25 @@ function formatDate(iso) {
 }
 
 function statusBadge(status) {
-  const map = {
-    'Pending': 'bg-amber-50 text-amber-700',
-    'In Progress': 'bg-blue-50 text-blue-700',
-    'Completed': 'bg-green-50 text-green-700'
-  };
+  const map = { 'Pending': 'bg-amber-50 text-amber-700', 'In Progress': 'bg-blue-50 text-blue-700', 'Completed': 'bg-green-50 text-green-700' };
   const cls = map[status] || 'bg-gray-100 text-gray-600';
   return `<span class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide ${cls}">${escapeHtml(status)}</span>`;
 }
 
 function tipeBadge(tipe) {
-  if (tipe === 'Internal') {
-    return `<span class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide bg-maroon-900 text-white">Internal</span>`;
-  }
+  if (tipe === 'Internal') return `<span class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide bg-maroon-900 text-white">Internal</span>`;
   return `<span class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide bg-maroon-100 text-maroon-700">Request</span>`;
 }
 
+function slaBadge(slaStatus) {
+  if (!slaStatus) return '<span class="text-xs text-gray-300">-</span>';
+  const map = { 'Tepat Waktu': 'bg-green-50 text-green-700', 'Terlambat': 'bg-maroon-900 text-white', 'Lewat Deadline': 'bg-maroon-900 text-white' };
+  const cls = map[slaStatus] || 'bg-gray-100 text-gray-600';
+  return `<span class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide ${cls}">${escapeHtml(slaStatus)}</span>`;
+}
+
 function prioritasBadge(p) {
-  const map = {
-    'Rendah': 'text-gray-400',
-    'Sedang': 'text-gray-600',
-    'Tinggi': 'text-maroon-700 font-semibold',
-    'Urgent': 'text-maroon-900 font-bold'
-  };
+  const map = { 'Rendah': 'text-gray-400', 'Sedang': 'text-gray-600', 'Tinggi': 'text-maroon-700 font-semibold', 'Urgent': 'text-maroon-900 font-bold' };
   return `<span class="${map[p] || ''}">${escapeHtml(p)}</span>`;
 }
 
@@ -514,12 +527,12 @@ function enterApp() {
 
 document.getElementById('loginForm').addEventListener('submit', async (e) => {
   e.preventDefault();
-  const email = document.getElementById('loginEmail').value.trim();
+  const identifier = document.getElementById('loginIdentifier').value.trim();
   const password = document.getElementById('loginPassword').value;
   const errEl = document.getElementById('loginError');
   errEl.classList.add('hidden');
 
-  const res = await callApi('login', { email, password });
+  const res = await callApi('login', { identifier, password });
   if (res.success) {
     currentUser = res.user;
     saveSession(currentUser);
@@ -531,12 +544,8 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
 });
 
 document.getElementById('logoutBtn').addEventListener('click', () => {
-  clearSession();
-  currentUser = null;
-  location.reload();
+  clearSession(); currentUser = null; location.reload();
 });
-
-// ---------------- SIDEBAR NAV ----------------
 
 document.querySelectorAll('.nav-btn').forEach(btn => {
   btn.addEventListener('click', () => {
@@ -545,7 +554,6 @@ document.querySelectorAll('.nav-btn').forEach(btn => {
     document.getElementById('sidebarOverlay').classList.add('hidden');
   });
 });
-
 document.getElementById('sidebarToggle').addEventListener('click', () => {
   document.getElementById('sidebar').classList.remove('-translate-x-full');
   document.getElementById('sidebarOverlay').classList.remove('hidden');
@@ -571,31 +579,36 @@ function switchTab(tabName) {
   });
 }
 
-// ---------------- DIVISI LIST ----------------
-
 async function loadDivisiList() {
   const res = await callApi('getDivisiList');
-  const select = document.getElementById('reqDivisiTujuan');
-  select.innerHTML = '<option value="">-- Pilih Divisi --</option>';
+  const container = document.getElementById('reqDivisiCheckboxContainer');
+  container.innerHTML = '';
   if (res.success) {
-    res.divisiList
-      .filter(d => d.toLowerCase() !== (currentUser.divisi || '').toLowerCase())
-      .forEach(d => {
-        const opt = document.createElement('option');
-        opt.value = d;
-        opt.textContent = d;
-        select.appendChild(opt);
-      });
+    const others = res.divisiList.filter(d => d.toLowerCase() !== (currentUser.divisi || '').toLowerCase());
+    others.forEach(d => {
+      const wrapper = document.createElement('label');
+      wrapper.className = 'flex items-center gap-2 text-sm text-gray-700';
+      wrapper.innerHTML = `<input type="checkbox" class="divisi-checkbox rounded border-gray-300 text-maroon-700 focus:ring-maroon-500" value="${escapeHtml(d)}"> ${escapeHtml(d)}`;
+      container.appendChild(wrapper);
+    });
+    document.getElementById('reqSelectAllDivisi').checked = false;
   }
 }
 
-// ---------------- CREATE REQUEST ----------------
+document.getElementById('reqSelectAllDivisi').addEventListener('change', function () {
+  document.querySelectorAll('.divisi-checkbox').forEach(cb => cb.checked = this.checked);
+});
 
 document.getElementById('requestForm').addEventListener('submit', async (e) => {
   e.preventDefault();
+  const divisiTujuanList = Array.from(document.querySelectorAll('.divisi-checkbox:checked')).map(cb => cb.value);
+  if (divisiTujuanList.length === 0) {
+    showToast('Pilih minimal satu Divisi Tujuan.', 'error');
+    return;
+  }
   const payload = {
     divisiPemohon: currentUser.divisi,
-    divisiTujuan: document.getElementById('reqDivisiTujuan').value,
+    divisiTujuanList: divisiTujuanList,
     namaTugas: document.getElementById('reqNamaTugas').value,
     prioritas: document.getElementById('reqPrioritas').value,
     deadline: document.getElementById('reqDeadline').value,
@@ -607,7 +620,7 @@ document.getElementById('requestForm').addEventListener('submit', async (e) => {
 
   const res = await callApi('createRequest', payload);
   if (res.success) {
-    showToast('Request berhasil dikirim (' + res.id + ').');
+    showToast(res.message);
     document.getElementById('requestForm').reset();
     document.getElementById('reqDivisiPemohon').value = currentUser.divisi;
     loadDashboard();
@@ -640,8 +653,6 @@ document.getElementById('internalNoteForm').addEventListener('submit', async (e)
   }
 });
 
-// ---------------- DASHBOARD ----------------
-
 async function loadDashboard() {
   const res = await callApi('getDashboard', { divisi: currentUser.divisi, role: currentUser.role });
   if (!res.success) {
@@ -668,14 +679,13 @@ function renderJobMasuk(list) {
     const tr = document.createElement('tr');
     tr.className = 'border-b border-gray-100 hover:bg-gray-50 transition';
     tr.innerHTML = `
-      <td class="px-5 py-4">
-        <p class="font-mono text-xs text-gray-500 mb-1">${escapeHtml(job.idRequest)}</p>
-        ${tipeBadge(job.tipe)}
-      </td>
+      <td class="px-5 py-4"><p class="font-mono text-xs text-gray-500 mb-1">${escapeHtml(job.idRequest)}</p>${tipeBadge(job.tipe)}</td>
       <td class="px-5 py-4 font-medium text-gray-800">${escapeHtml(job.namaTugas)}</td>
       <td class="px-5 py-4 text-gray-600">${escapeHtml(job.divisiPemohon)}</td>
       <td class="px-5 py-4">${prioritasBadge(job.prioritas)}</td>
       <td class="px-5 py-4 text-xs text-gray-500">${formatDate(job.deadline)}</td>
+      <td class="px-5 py-4 text-xs text-gray-500">${formatDate(job.tanggalSelesai)}</td>
+      <td class="px-5 py-4">${slaBadge(job.slaStatus)}</td>
       <td class="px-5 py-4">${statusBadge(job.status)}</td>
       <td class="px-5 py-4">
         <select class="text-xs border border-gray-200 rounded-lg px-2 py-1.5 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-maroon-500"
@@ -699,13 +709,19 @@ function renderJobKeluar(list) {
   list.forEach(job => {
     const tr = document.createElement('tr');
     tr.className = 'border-b border-gray-100 hover:bg-gray-50 transition';
+    const reminderBtn = job.status !== 'Completed'
+      ? `<button onclick="sendReminder('${escapeHtml(job.idRequest)}')" class="text-xs bg-maroon-100 text-maroon-700 hover:bg-maroon-200 px-3 py-1.5 rounded-lg font-medium transition">Kirim Pengingat</button>`
+      : `<span class="text-xs text-gray-300">-</span>`;
     tr.innerHTML = `
       <td class="px-5 py-4 font-mono text-xs text-gray-500">${escapeHtml(job.idRequest)}</td>
       <td class="px-5 py-4 font-medium text-gray-800">${escapeHtml(job.namaTugas)}</td>
       <td class="px-5 py-4 text-gray-600">${escapeHtml(job.divisiTujuan)}</td>
       <td class="px-5 py-4">${prioritasBadge(job.prioritas)}</td>
       <td class="px-5 py-4 text-xs text-gray-500">${formatDate(job.deadline)}</td>
+      <td class="px-5 py-4 text-xs text-gray-500">${formatDate(job.tanggalSelesai)}</td>
+      <td class="px-5 py-4">${slaBadge(job.slaStatus)}</td>
       <td class="px-5 py-4">${statusBadge(job.status)}</td>
+      <td class="px-5 py-4">${reminderBtn}</td>
     `;
     body.appendChild(tr);
   });
@@ -717,37 +733,93 @@ function renderSLA(sla, allJobs) {
   document.getElementById('slaSelesai').textContent = sla.totalSelesai;
   document.getElementById('slaOverdue').textContent = sla.totalOverdue;
 
+  renderSLATable(allJobs);
+  renderCharts(allJobs);
+}
+
+function renderSLATable(allJobs) {
   const body = document.getElementById('slaAllBody');
   body.innerHTML = '';
   allJobs.forEach(job => {
     const tr = document.createElement('tr');
     tr.className = 'border-b border-gray-100 hover:bg-gray-50 transition';
     tr.innerHTML = `
-      <td class="px-5 py-4">
-        <p class="font-mono text-xs text-gray-500 mb-1">${escapeHtml(job.idRequest)}</p>
-        ${tipeBadge(job.tipe)}
-      </td>
+      <td class="px-5 py-4"><p class="font-mono text-xs text-gray-500 mb-1">${escapeHtml(job.idRequest)}</p>${tipeBadge(job.tipe)}</td>
       <td class="px-5 py-4 font-medium text-gray-800">${escapeHtml(job.namaTugas)}</td>
       <td class="px-5 py-4 text-gray-600">${escapeHtml(job.divisiPemohon)}</td>
       <td class="px-5 py-4 text-gray-600">${escapeHtml(job.divisiTujuan)}</td>
       <td class="px-5 py-4 text-xs text-gray-500">${formatDate(job.deadline)}</td>
+      <td class="px-5 py-4 text-xs text-gray-500">${formatDate(job.tanggalSelesai)}</td>
+      <td class="px-5 py-4">${slaBadge(job.slaStatus)}</td>
       <td class="px-5 py-4">${statusBadge(job.status)}</td>
     `;
     body.appendChild(tr);
   });
 }
 
-async function updateStatus(id, newStatus) {
-  const res = await callApi('updateStatus', { id, newStatus });
-  if (res.success) {
-    showToast('Status tiket ' + id + ' diperbarui.');
-    loadDashboard();
-  } else {
-    showToast(res.message || 'Gagal memperbarui status.', 'error');
-  }
+function renderCharts(allJobs) {
+  const statusCounts = { 'Pending': 0, 'In Progress': 0, 'Completed': 0 };
+  allJobs.forEach(j => { if (statusCounts[j.status] !== undefined) statusCounts[j.status]++; });
+
+  const divisiLoadMap = {};
+  allJobs.forEach(j => {
+    const d = j.divisiTujuan || 'Tidak diketahui';
+    divisiLoadMap[d] = (divisiLoadMap[d] || 0) + 1;
+  });
+
+  const slaMap = {};
+  allJobs.forEach(j => {
+    if (j.slaStatus === 'Tepat Waktu' || j.slaStatus === 'Terlambat') {
+      const d = j.divisiTujuan || 'Tidak diketahui';
+      if (!slaMap[d]) slaMap[d] = { onTime: 0, late: 0 };
+      if (j.slaStatus === 'Tepat Waktu') slaMap[d].onTime++; else slaMap[d].late++;
+    }
+  });
+
+  if (window._chartStatus) window._chartStatus.destroy();
+  if (window._chartLoad) window._chartLoad.destroy();
+  if (window._chartSla) window._chartSla.destroy();
+
+  const maroonPalette = ['#A53A4D', '#7A2635', '#C15A6E', '#4A1620', '#E8BCB8'];
+
+  window._chartStatus = new Chart(document.getElementById('chartStatus'), {
+    type: 'doughnut',
+    data: { labels: Object.keys(statusCounts), datasets: [{ data: Object.values(statusCounts), backgroundColor: maroonPalette, borderWidth: 0 }] },
+    options: { plugins: { legend: { position: 'bottom', labels: { font: { family: 'Poppins' } } } } }
+  });
+
+  const divisiLabels = Object.keys(divisiLoadMap);
+  window._chartLoad = new Chart(document.getElementById('chartLoad'), {
+    type: 'bar',
+    data: { labels: divisiLabels, datasets: [{ label: 'Jumlah Tiket', data: Object.values(divisiLoadMap), backgroundColor: '#A53A4D', borderRadius: 6 }] },
+    options: { plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { precision: 0 } } } }
+  });
+
+  const slaLabels = Object.keys(slaMap);
+  window._chartSla = new Chart(document.getElementById('chartSla'), {
+    type: 'bar',
+    data: {
+      labels: slaLabels,
+      datasets: [
+        { label: 'Tepat Waktu', data: slaLabels.map(d => slaMap[d].onTime), backgroundColor: '#16a34a', borderRadius: 6 },
+        { label: 'Terlambat', data: slaLabels.map(d => slaMap[d].late), backgroundColor: '#4A1620', borderRadius: 6 }
+      ]
+    },
+    options: { plugins: { legend: { position: 'bottom' } }, scales: { x: { stacked: true }, y: { stacked: true, beginAtZero: true, ticks: { precision: 0 } } } }
+  });
 }
 
-// ---------------- SEARCH & FILTER (client-side) ----------------
+async function updateStatus(id, newStatus) {
+  const res = await callApi('updateStatus', { id, newStatus });
+  if (res.success) { showToast('Status tiket ' + id + ' diperbarui.'); loadDashboard(); }
+  else { showToast(res.message || 'Gagal memperbarui status.', 'error'); }
+}
+
+async function sendReminder(id) {
+  const res = await callApi('sendReminder', { id, requesterEmail: currentUser.email, requesterRole: currentUser.role });
+  if (res.success) showToast(res.message);
+  else showToast(res.message || 'Gagal mengirim pengingat.', 'error');
+}
 
 function matchSearch(job, keyword) {
   const k = keyword.toLowerCase();
@@ -774,30 +846,8 @@ document.getElementById('searchJobKeluar').addEventListener('input', () => {
 document.getElementById('searchSLA').addEventListener('input', () => {
   const keyword = document.getElementById('searchSLA').value;
   const filtered = keyword ? cachedAllJobs.filter(j => matchSearch(j, keyword)) : cachedAllJobs;
-  const sla = {
-    totalTiket: document.getElementById('slaTotal').textContent,
-    totalPending: document.getElementById('slaPending').textContent,
-    totalSelesai: document.getElementById('slaSelesai').textContent,
-    totalOverdue: document.getElementById('slaOverdue').textContent
-  };
-  const body = document.getElementById('slaAllBody');
-  body.innerHTML = '';
-  filtered.forEach(job => {
-    const tr = document.createElement('tr');
-    tr.className = 'border-b border-gray-100 hover:bg-gray-50 transition';
-    tr.innerHTML = `
-      <td class="px-5 py-4"><p class="font-mono text-xs text-gray-500 mb-1">${escapeHtml(job.idRequest)}</p>${tipeBadge(job.tipe)}</td>
-      <td class="px-5 py-4 font-medium text-gray-800">${escapeHtml(job.namaTugas)}</td>
-      <td class="px-5 py-4 text-gray-600">${escapeHtml(job.divisiPemohon)}</td>
-      <td class="px-5 py-4 text-gray-600">${escapeHtml(job.divisiTujuan)}</td>
-      <td class="px-5 py-4 text-xs text-gray-500">${formatDate(job.deadline)}</td>
-      <td class="px-5 py-4">${statusBadge(job.status)}</td>
-    `;
-    body.appendChild(tr);
-  });
+  renderSLATable(filtered);
 });
-
-// ---------------- CHANGE PASSWORD ----------------
 
 document.getElementById('changePasswordForm').addEventListener('submit', async (e) => {
   e.preventDefault();
@@ -805,22 +855,13 @@ document.getElementById('changePasswordForm').addEventListener('submit', async (
   const newPassword = document.getElementById('newPassword').value;
 
   const res = await callApi('changePassword', { email: currentUser.email, oldPassword, newPassword });
-  if (res.success) {
-    showToast('Password berhasil diubah.');
-    document.getElementById('changePasswordForm').reset();
-  } else {
-    showToast(res.message || 'Gagal mengubah password.', 'error');
-  }
+  if (res.success) { showToast('Password berhasil diubah.'); document.getElementById('changePasswordForm').reset(); }
+  else { showToast(res.message || 'Gagal mengubah password.', 'error'); }
 });
-
-// ---------------- INIT ----------------
 
 (function init() {
   const session = getSession();
-  if (session) {
-    currentUser = session;
-    enterApp();
-  }
+  if (session) { currentUser = session; enterApp(); }
 })();
 </script>
 </body>
