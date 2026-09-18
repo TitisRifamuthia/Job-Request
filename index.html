@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sistem Job Request PT.Serasi Manunggal Sejahtera</title>
+<title>Sistem Job Request & Ticketing Internal</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdn.tailwindcss.com"></script>
@@ -191,7 +191,9 @@
                 <input type="checkbox" id="reqSelectAllDivisi" class="rounded border-gray-300 text-maroon-700 focus:ring-maroon-500">
                 Pilih Semua Divisi
               </label>
-              <div id="reqDivisiCheckboxContainer" class="border border-gray-200 rounded-lg p-3 max-h-48 overflow-y-auto space-y-2 bg-gray-50"></div>
+              <div id="reqDivisiCheckboxContainer" class="border border-gray-200 rounded-lg p-3 max-h-48 overflow-y-auto space-y-2 bg-gray-50">
+                <p class="text-xs text-gray-400">Memuat daftar divisi...</p>
+              </div>
             </div>
 
             <div class="md:col-span-2">
@@ -362,17 +364,26 @@
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
           <div class="bg-white rounded-2xl shadow-sm p-5">
             <h3 class="text-sm font-semibold text-gray-700 mb-3">Distribusi Status Tiket</h3>
-            <canvas id="chartStatus" height="220"></canvas>
+            <div class="relative" style="min-height:220px;">
+              <canvas id="chartStatus" height="220"></canvas>
+              <p id="chartStatusEmpty" class="hidden absolute inset-0 flex items-center justify-center text-sm text-gray-400">Belum ada data.</p>
+            </div>
           </div>
           <div class="bg-white rounded-2xl shadow-sm p-5">
             <h3 class="text-sm font-semibold text-gray-700 mb-3">Beban Tiket per Divisi (Aktivitas)</h3>
-            <canvas id="chartLoad" height="220"></canvas>
+            <div class="relative" style="min-height:220px;">
+              <canvas id="chartLoad" height="220"></canvas>
+              <p id="chartLoadEmpty" class="hidden absolute inset-0 flex items-center justify-center text-sm text-gray-400">Belum ada data.</p>
+            </div>
           </div>
         </div>
 
         <div class="bg-white rounded-2xl shadow-sm p-5 mb-6">
           <h3 class="text-sm font-semibold text-gray-700 mb-3">Ketepatan SLA per Divisi (Tepat Waktu vs Terlambat)</h3>
-          <canvas id="chartSla" height="220"></canvas>
+          <div class="relative" style="min-height:220px;">
+            <canvas id="chartSla" height="220"></canvas>
+            <p id="chartSlaEmpty" class="hidden absolute inset-0 flex items-center justify-center text-sm text-gray-400">Belum ada tiket dengan deadline yang selesai/lewat.</p>
+          </div>
         </div>
 
         <div class="bg-white rounded-2xl shadow-sm overflow-hidden">
@@ -448,7 +459,7 @@ function showToast(message, type = 'success') {
   toast.className = 'fixed top-5 right-5 z-50 max-w-sm px-4 py-3 rounded-xl shadow-lg text-sm font-medium fade-in ' +
     (type === 'success' ? 'bg-green-600 text-white' : 'bg-red-600 text-white');
   toast.classList.remove('hidden');
-  setTimeout(() => toast.classList.add('hidden'), 3500);
+  setTimeout(() => toast.classList.add('hidden'), 4000);
 }
 
 function setLoading(state) { document.getElementById('loadingOverlay').classList.toggle('hidden', !state); }
@@ -496,8 +507,12 @@ async function callApi(action, payload = {}) {
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
       body: JSON.stringify({ action, ...payload })
     });
-    return await res.json();
+    const json = await res.json();
+    // Debug: buka Console (F12) untuk melihat respons mentah dari backend jika ada masalah.
+    console.log('API [' + action + ']', json);
+    return json;
   } catch (err) {
+    console.error('API error [' + action + ']', err);
     showToast('Gagal terhubung ke server: ' + err.message, 'error');
     return { success: false, message: err.message };
   } finally {
@@ -580,19 +595,32 @@ function switchTab(tabName) {
 }
 
 async function loadDivisiList() {
-  const res = await callApi('getDivisiList');
   const container = document.getElementById('reqDivisiCheckboxContainer');
+  container.innerHTML = '<p class="text-xs text-gray-400">Memuat daftar divisi...</p>';
+
+  const res = await callApi('getDivisiList');
   container.innerHTML = '';
-  if (res.success) {
-    const others = res.divisiList.filter(d => d.toLowerCase() !== (currentUser.divisi || '').toLowerCase());
-    others.forEach(d => {
-      const wrapper = document.createElement('label');
-      wrapper.className = 'flex items-center gap-2 text-sm text-gray-700';
-      wrapper.innerHTML = `<input type="checkbox" class="divisi-checkbox rounded border-gray-300 text-maroon-700 focus:ring-maroon-500" value="${escapeHtml(d)}"> ${escapeHtml(d)}`;
-      container.appendChild(wrapper);
-    });
-    document.getElementById('reqSelectAllDivisi').checked = false;
+
+  if (!res.success) {
+    container.innerHTML = `<p class="text-xs text-red-500">Gagal memuat daftar divisi: ${escapeHtml(res.message || 'Tidak diketahui')}</p>`;
+    showToast(res.message || 'Gagal memuat daftar divisi.', 'error');
+    return;
   }
+
+  const others = res.divisiList.filter(d => d.toLowerCase() !== (currentUser.divisi || '').toLowerCase());
+
+  if (others.length === 0) {
+    container.innerHTML = '<p class="text-xs text-gray-400">Tidak ada divisi lain yang terdaftar di Master_User.</p>';
+    return;
+  }
+
+  others.forEach(d => {
+    const wrapper = document.createElement('label');
+    wrapper.className = 'flex items-center gap-2 text-sm text-gray-700';
+    wrapper.innerHTML = `<input type="checkbox" class="divisi-checkbox rounded border-gray-300 text-maroon-700 focus:ring-maroon-500" value="${escapeHtml(d)}"> ${escapeHtml(d)}`;
+    container.appendChild(wrapper);
+  });
+  document.getElementById('reqSelectAllDivisi').checked = false;
 }
 
 document.getElementById('reqSelectAllDivisi').addEventListener('change', function () {
@@ -758,55 +786,88 @@ function renderSLATable(allJobs) {
 }
 
 function renderCharts(allJobs) {
-  const statusCounts = { 'Pending': 0, 'In Progress': 0, 'Completed': 0 };
-  allJobs.forEach(j => { if (statusCounts[j.status] !== undefined) statusCounts[j.status]++; });
-
-  const divisiLoadMap = {};
-  allJobs.forEach(j => {
-    const d = j.divisiTujuan || 'Tidak diketahui';
-    divisiLoadMap[d] = (divisiLoadMap[d] || 0) + 1;
-  });
-
-  const slaMap = {};
-  allJobs.forEach(j => {
-    if (j.slaStatus === 'Tepat Waktu' || j.slaStatus === 'Terlambat') {
-      const d = j.divisiTujuan || 'Tidak diketahui';
-      if (!slaMap[d]) slaMap[d] = { onTime: 0, late: 0 };
-      if (j.slaStatus === 'Tepat Waktu') slaMap[d].onTime++; else slaMap[d].late++;
-    }
-  });
-
-  if (window._chartStatus) window._chartStatus.destroy();
-  if (window._chartLoad) window._chartLoad.destroy();
-  if (window._chartSla) window._chartSla.destroy();
-
   const maroonPalette = ['#A53A4D', '#7A2635', '#C15A6E', '#4A1620', '#E8BCB8'];
 
-  window._chartStatus = new Chart(document.getElementById('chartStatus'), {
-    type: 'doughnut',
-    data: { labels: Object.keys(statusCounts), datasets: [{ data: Object.values(statusCounts), backgroundColor: maroonPalette, borderWidth: 0 }] },
-    options: { plugins: { legend: { position: 'bottom', labels: { font: { family: 'Poppins' } } } } }
-  });
+  // --- Chart 1: Distribusi Status ---
+  try {
+    const statusCounts = { 'Pending': 0, 'In Progress': 0, 'Completed': 0 };
+    allJobs.forEach(j => { if (statusCounts[j.status] !== undefined) statusCounts[j.status]++; });
+    const totalStatus = Object.values(statusCounts).reduce((a, b) => a + b, 0);
 
-  const divisiLabels = Object.keys(divisiLoadMap);
-  window._chartLoad = new Chart(document.getElementById('chartLoad'), {
-    type: 'bar',
-    data: { labels: divisiLabels, datasets: [{ label: 'Jumlah Tiket', data: Object.values(divisiLoadMap), backgroundColor: '#A53A4D', borderRadius: 6 }] },
-    options: { plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { precision: 0 } } } }
-  });
+    document.getElementById('chartStatusEmpty').classList.toggle('hidden', totalStatus > 0);
 
-  const slaLabels = Object.keys(slaMap);
-  window._chartSla = new Chart(document.getElementById('chartSla'), {
-    type: 'bar',
-    data: {
-      labels: slaLabels,
-      datasets: [
-        { label: 'Tepat Waktu', data: slaLabels.map(d => slaMap[d].onTime), backgroundColor: '#16a34a', borderRadius: 6 },
-        { label: 'Terlambat', data: slaLabels.map(d => slaMap[d].late), backgroundColor: '#4A1620', borderRadius: 6 }
-      ]
-    },
-    options: { plugins: { legend: { position: 'bottom' } }, scales: { x: { stacked: true }, y: { stacked: true, beginAtZero: true, ticks: { precision: 0 } } } }
-  });
+    if (window._chartStatus) window._chartStatus.destroy();
+    if (totalStatus > 0) {
+      window._chartStatus = new Chart(document.getElementById('chartStatus'), {
+        type: 'doughnut',
+        data: { labels: Object.keys(statusCounts), datasets: [{ data: Object.values(statusCounts), backgroundColor: maroonPalette, borderWidth: 0 }] },
+        options: { plugins: { legend: { position: 'bottom', labels: { font: { family: 'Poppins' } } } } }
+      });
+    }
+  } catch (err) {
+    console.error('Gagal membuat chartStatus:', err);
+    document.getElementById('chartStatusEmpty').textContent = 'Gagal memuat grafik.';
+    document.getElementById('chartStatusEmpty').classList.remove('hidden');
+  }
+
+  // --- Chart 2: Beban Tiket per Divisi ---
+  try {
+    const divisiLoadMap = {};
+    allJobs.forEach(j => {
+      const d = j.divisiTujuan || 'Tidak diketahui';
+      divisiLoadMap[d] = (divisiLoadMap[d] || 0) + 1;
+    });
+    const divisiLabels = Object.keys(divisiLoadMap);
+
+    document.getElementById('chartLoadEmpty').classList.toggle('hidden', divisiLabels.length > 0);
+
+    if (window._chartLoad) window._chartLoad.destroy();
+    if (divisiLabels.length > 0) {
+      window._chartLoad = new Chart(document.getElementById('chartLoad'), {
+        type: 'bar',
+        data: { labels: divisiLabels, datasets: [{ label: 'Jumlah Tiket', data: Object.values(divisiLoadMap), backgroundColor: '#A53A4D', borderRadius: 6 }] },
+        options: { plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { precision: 0 } } } }
+      });
+    }
+  } catch (err) {
+    console.error('Gagal membuat chartLoad:', err);
+    document.getElementById('chartLoadEmpty').textContent = 'Gagal memuat grafik.';
+    document.getElementById('chartLoadEmpty').classList.remove('hidden');
+  }
+
+  // --- Chart 3: Ketepatan SLA per Divisi ---
+  try {
+    const slaMap = {};
+    allJobs.forEach(j => {
+      if (j.slaStatus === 'Tepat Waktu' || j.slaStatus === 'Terlambat') {
+        const d = j.divisiTujuan || 'Tidak diketahui';
+        if (!slaMap[d]) slaMap[d] = { onTime: 0, late: 0 };
+        if (j.slaStatus === 'Tepat Waktu') slaMap[d].onTime++; else slaMap[d].late++;
+      }
+    });
+    const slaLabels = Object.keys(slaMap);
+
+    document.getElementById('chartSlaEmpty').classList.toggle('hidden', slaLabels.length > 0);
+
+    if (window._chartSla) window._chartSla.destroy();
+    if (slaLabels.length > 0) {
+      window._chartSla = new Chart(document.getElementById('chartSla'), {
+        type: 'bar',
+        data: {
+          labels: slaLabels,
+          datasets: [
+            { label: 'Tepat Waktu', data: slaLabels.map(d => slaMap[d].onTime), backgroundColor: '#16a34a', borderRadius: 6 },
+            { label: 'Terlambat', data: slaLabels.map(d => slaMap[d].late), backgroundColor: '#4A1620', borderRadius: 6 }
+          ]
+        },
+        options: { plugins: { legend: { position: 'bottom' } }, scales: { x: { stacked: true }, y: { stacked: true, beginAtZero: true, ticks: { precision: 0 } } } }
+      });
+    }
+  } catch (err) {
+    console.error('Gagal membuat chartSla:', err);
+    document.getElementById('chartSlaEmpty').textContent = 'Gagal memuat grafik.';
+    document.getElementById('chartSlaEmpty').classList.remove('hidden');
+  }
 }
 
 async function updateStatus(id, newStatus) {
